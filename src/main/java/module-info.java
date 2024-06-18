@@ -3,6 +3,7 @@ module com.github.bredecorne.masp {
     requires javafx.fxml;
 
     requires org.kordamp.bootstrapfx.core;
+    requires jdk.jshell;
 
     opens com.github.bredecorne.masp to javafx.fxml;
     exports com.github.bredecorne.masp;
