@@ -17,7 +17,7 @@ public class PeriodEntrySet {
     private final LocalDate dateTo;
     
     // Ekstensja
-    private final HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
+    private static final HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
     
     // Asocjacje wiele-do-wiele
     private final HashSet<AccountManager> accountManagers = new HashSet<>();
@@ -34,6 +34,8 @@ public class PeriodEntrySet {
         this.dateTo = dateTo;
         this.person = person;
         this.entries = entries;
+        
+        periodEntrySets.add(this); // Dodaje do ekstensji
     }
 
     public HashSet<Entry> getEntries() {
@@ -82,8 +84,12 @@ public class PeriodEntrySet {
         return getRevenue().subtract(getExpenses());
     }
 
-    public BigDecimal getAfterTaxIncome(Tax applicableTax) {
+    public BigDecimal getTax(Tax applicableTax) {
         return applicableTax.calculateTax(getIncome());
+    }
+    
+    public BigDecimal getAfterTaxIncome(Tax applicableTax) {
+        return getIncome().subtract(applicableTax.calculateTax(getIncome()));
     }
 
     public BigDecimal getFee(Tax applicableTax) {
@@ -105,7 +111,25 @@ public class PeriodEntrySet {
         }
     }
     
+    public void addAccountManager(AccountManager accountManager) {
+        if (accountManager == null) { throw new IllegalArgumentException(); }
+        if (!accountManagers.contains(accountManager)) {
+            accountManagers.add(accountManager);
+            accountManager.addPeriodEntrySet(this);
+        }
+    }
     
+    public void removeAccountManager(AccountManager accountManager) {
+        if (accountManagers.contains(accountManager)) {
+            accountManagers.remove(accountManager);
+            accountManager.removePeriodEntrySet(this);
+        }
+    }
+
+    public static HashSet<PeriodEntrySet> getPeriodEntrySets() {
+        return new HashSet<>(periodEntrySets);
+    }
+
     public class Entry {
         
         // Atrybuty wymagane
