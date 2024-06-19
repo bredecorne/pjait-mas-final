@@ -14,8 +14,8 @@ public class Address implements Serializable {
     // Asocjacje wiele-do-wiele
     private final HashSet<Person> persons = new HashSet<>();
     
-    // Asocjacje jeden-do-wiele (po stronie wiele)
-    private final HashSet<TaxOffice> taxOffices = new HashSet<>();
+    // Asocjacje jeden-do-wiele (po stronie jeden)
+    private TaxOffice taxOffice;
     
     // Atrybuty wymagane
     private final Country country;
@@ -25,6 +25,20 @@ public class Address implements Serializable {
     
     // Atrybuty opcjonalne
     private String apartmentNumber;
+
+    public Address(Country country, String city, String street, String houseNumber, String apartmentNumber, 
+                   TaxOffice taxOffice) {
+        if (country == null || city == null || street == null ||
+                isHouseNumberInvalid(houseNumber)) {
+            throw new IllegalArgumentException();
+        }
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.apartmentNumber = apartmentNumber;
+        this.taxOffice = taxOffice;
+    }
 
     public Address(Country country, String city, String street, String houseNumber, String apartmentNumber) {
         if (country == null || city == null || street == null ||
@@ -75,38 +89,13 @@ public class Address implements Serializable {
         Address.addresses = addresses;
     }
 
-    /**
-     * Dodaje nowe powiązanie z obiektem reprezentującym urząd podatkowy.
-     * <p>
-     * Wywołuje analogiczną metodę po stronie urzędu podatkowego i tworzy powiązanie tylko, jeżeli powiązanie
-     * po stronie urzędu podatkowego zostało utworzone poprawnie.
-     * </p>
-     *
-     * @param taxOffice Urząd podatkowy, niebędący wartością null.
-     */
-    public void addTaxOffice(TaxOffice taxOffice) {
-        if (!taxOffices.contains(taxOffice) && taxOffice != null) {
-            taxOffice.setAddress(this);
-            if (taxOffice.getAddress() == this) {
-                taxOffices.add(taxOffice);
-            }
-        }
+    public TaxOffice getTaxOffice() {
+        return taxOffice;
     }
 
-    /**
-     * Usuwa powiązanie z urzędem podatkowym.
-     * <p>
-     * Wywołuje analogiczną metodę po stronie urzędu podatkowego i ustala wartość adresu po stronie urzędu
-     * na wartość null.
-     * </p>
-     *
-     * @param taxOffice Urząd podatkowy, niebędący wartością null.
-     */
-    public void removeTaxOffice(TaxOffice taxOffice) {
-        if (taxOffices.contains(taxOffice)) {
-            taxOffices.remove(taxOffice);
-            taxOffice.setAddress(null);
-        }
+    public void setTaxOffice(TaxOffice taxOffice) {
+        this.taxOffice = taxOffice;
+        taxOffice.addAddress(this);
     }
 
     /**
@@ -164,9 +153,5 @@ public class Address implements Serializable {
 
     public HashSet<Person> getPersons() {
         return new HashSet<>(persons);
-    }
-
-    public HashSet<TaxOffice> getTaxOffices() {
-        return new HashSet<>(taxOffices);
     }
 }

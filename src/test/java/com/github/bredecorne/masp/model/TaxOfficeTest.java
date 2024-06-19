@@ -15,32 +15,4 @@ class TaxOfficeTest {
         
         assertEquals(name, taxOffice.getName());
     }
-
-    @Test
-    void createsTaxOfficesAndAssociatesItWithAnAddress() {
-        var name = "Urząd Skarbowy nr 10 w Lipinkach-Łużyckich";
-        var address = new Address(Country.PL, "Gdynia", "Łąkowa", "4A", "20");
-        
-        var taxOffice = new TaxOffice(name, address);
-        
-        assertAll(
-                () -> assertEquals(name, taxOffice.getName()),
-                () -> assertEquals(address, taxOffice.getAddress())
-        );
-    }
-
-    @Test
-    void modifiesTaxOfficeAssociationWithAnAddress() {
-        var name = "Urząd Skarbowy nr 10 w Lipinkach-Łużyckich";
-        var address = new Address(Country.PL, "Bedoń Przykościelny", "Łąkowa", "4A", "20");
-        var address1 = new Address(Country.PL, "Wieś Stara", "Betonowa", "70B", "1");
-
-        var taxOffice = new TaxOffice(name, address);
-        taxOffice.setAddress(address1);
-
-        assertAll(
-                () -> assertEquals(name, taxOffice.getName()),
-                () -> assertEquals(address1, taxOffice.getAddress())
-        );
-    }
 }

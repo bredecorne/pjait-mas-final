@@ -3,6 +3,7 @@ package com.github.bredecorne.masp.controller;
 import com.github.bredecorne.masp.model.Address;
 import com.github.bredecorne.masp.model.TaxOffice;
 import com.github.bredecorne.masp.utils.Repository;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,13 +12,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Objects;
 
-public class TaxOfficeChangeAddressController {
 
+public class TaxOfficeChangeAddressController {
 
     @FXML
     private TableView<TaxOffice> taxOfficeTable;
     @FXML
     private TableColumn<TaxOffice, String> taxOfficeTableColumn;
+
+    @FXML
+    private TableView<Address> addressesTable;
+    @FXML
+    private TableColumn<Address, String> addressesTableColumn;
 
     @FXML
     private ComboBox<String> addressCountryComboBox;
@@ -38,10 +44,8 @@ public class TaxOfficeChangeAddressController {
     @FXML
     private MenuItem loadMenu;
 
-
     @FXML
     public void initialize() {
-
         // Initial data
         populateTaxOfficesTable();
         populateAddressCountryComboBox();
@@ -54,17 +58,27 @@ public class TaxOfficeChangeAddressController {
         setupAddressSendButtonListener();
         setupSaveMenuItemListener();
         setupLoadMenuItemListener();
-
+        setupTaxOfficeTableListener();
     }
 
     private void populateTaxOfficesTable() {
         taxOfficeTableColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         ObservableList<TaxOffice> taxOfficeObservableList = FXCollections.observableArrayList(
-                FXCollections.observableSet(TaxOffice.getTaxOffices())
+                TaxOffice.getTaxOffices()
         );
 
         taxOfficeTable.setItems(taxOfficeObservableList);
+    }
+
+    private void populateAddressesTable(TaxOffice taxOffice) {
+        addressesTableColumn.setCellValueFactory(new PropertyValueFactory<>("street"));
+
+        ObservableList<Address> addressesObservableList = FXCollections.observableArrayList(
+                taxOffice.getAddresses()
+        );
+
+        addressesTable.setItems(addressesObservableList);
     }
 
     private void populateAddressCountryComboBox() {
@@ -122,12 +136,12 @@ public class TaxOfficeChangeAddressController {
         addressHouseNumberComboBox.setItems(houseNumbers);
     }
 
-    private void populateAddressApartmentNumberComboBox(String selectedApartment) {
+    private void populateAddressApartmentNumberComboBox(String selectedHouseNumber) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> apartmentNumbers = FXCollections.observableArrayList(
                 addresses.stream()
-                        .filter(address -> address.getHouseNumber().equals(selectedApartment))
+                        .filter(address -> address.getHouseNumber().equals(selectedHouseNumber))
                         .map(Address::getApartmentNumber)
                         .distinct()
                         .toList()
@@ -208,17 +222,12 @@ public class TaxOfficeChangeAddressController {
             if (selectedAddress != null) {
                 TaxOffice selectedTaxOffice = taxOfficeTable.getSelectionModel().getSelectedItem();
                 if (selectedTaxOffice != null) {
-                    selectedTaxOffice.setAddress(selectedAddress);
-
-                    showAlert(Alert.AlertType.INFORMATION, "Nadano właściwość", null,
-                            String.format("Adres dla urzędu %s został zaktualizowany, nowy adres to:\n" +
-                                            "%s, %s, %s, %s/%s.",
-                                    selectedTaxOffice.getName(),
-                                    selectedTaxOffice.getAddress().getCountry(),
-                                    selectedTaxOffice.getAddress().getCity(),
-                                    selectedTaxOffice.getAddress().getStreet(),
-                                    selectedTaxOffice.getAddress().getHouseNumber(),
-                                    selectedTaxOffice.getAddress().getApartmentNumber()));
+                    selectedTaxOffice.addAddress(selectedAddress);
+                    
+                    if (selectedTaxOffice.getAddresses().contains(selectedAddress)) {
+                        showAlert(Alert.AlertType.INFORMATION, "Nadano właściwość", null,
+                                "Dodano nowy adres dla danego urzędu.");
+                    }
                 } else {
                     showAlert(Alert.AlertType.INFORMATION, "Błąd", null,
                             "Nie wskazano urzędu podatkowego.");
@@ -246,6 +255,14 @@ public class TaxOfficeChangeAddressController {
         });
     }
 
+    private void setupTaxOfficeTableListener() {
+        taxOfficeTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                populateAddressesTable(newVal);
+            }
+        });
+    }
+    
     public void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

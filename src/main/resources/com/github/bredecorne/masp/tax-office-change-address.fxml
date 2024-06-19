@@ -97,7 +97,7 @@
                   <TableColumn fx:id="addressesTableColumn" prefWidth="269.0" resizable="false" text="" />
                </columns>
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="5.0" />
                </VBox.margin>
             </TableView>
             <Button fx:id="addressRemoveButton" mnemonicParsing="false" styleClass="btn" text="Usuń">

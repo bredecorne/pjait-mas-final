@@ -17,11 +17,9 @@ class AddressTest {
         var houseNumber = "4A";
         var apartmentNumber = "20";
         var taxOffice = new TaxOffice("Urząd Skarbowy nr 10 w Lipinkach-Łużyckich");
-        var taxOffices = new HashSet<TaxOffice>();
-        taxOffices.add(taxOffice);
         
         var address = new Address(country, city, street, houseNumber, apartmentNumber);
-        address.addTaxOffice(taxOffice);
+        address.setTaxOffice(taxOffice);
 
         assertAll(
                 () -> assertEquals(expectedCountry, address.getCountry()),
@@ -29,35 +27,8 @@ class AddressTest {
                 () -> assertEquals(street, address.getStreet()),
                 () -> assertEquals(houseNumber, address.getHouseNumber()),
                 () -> assertEquals(apartmentNumber, address.getApartmentNumber()),
-                () -> assertEquals(taxOffices, address.getTaxOffices()),
-                () -> assertEquals(address, taxOffice.getAddress())
+                () -> assertEquals(taxOffice, address.getTaxOffice()),
+                () -> assertEquals(address, taxOffice.getAddresses().stream().findFirst().orElse(null))
         );
     }
-
-    @Test
-    void modifiesAddressAssociationWithATaxOffice() {
-        var country = Country.PL;
-        var expectedCountry = "PL";
-        var city = "Poznań";
-        var street = "Łąkowa";
-        var houseNumber = "4A";
-        var apartmentNumber = "20";
-        var taxOffice = new TaxOffice("Urząd Skarbowy nr 10 w Lipinkach-Łużyckich");
-        var taxOffices = new HashSet<TaxOffice>();
-
-        var address = new Address(country, city, street, houseNumber, apartmentNumber);
-        address.addTaxOffice(taxOffice);
-        address.removeTaxOffice(taxOffice);
-
-        assertAll(
-                () -> assertEquals(expectedCountry, address.getCountry()),
-                () -> assertEquals(city, address.getCity()),
-                () -> assertEquals(street, address.getStreet()),
-                () -> assertEquals(houseNumber, address.getHouseNumber()),
-                () -> assertEquals(apartmentNumber, address.getApartmentNumber()),
-                () -> assertEquals(taxOffices, address.getTaxOffices()),
-                () -> assertNull(taxOffice.getAddress())
-        );
-    }
-    
 }

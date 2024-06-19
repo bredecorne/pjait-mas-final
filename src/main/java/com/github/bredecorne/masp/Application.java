@@ -46,6 +46,21 @@ public class Application extends javafx.application.Application {
         var address12 = new Address(Country.SK, "Ołomuniec", "Rynek", "7A", "2");
         var address14 = new Address(Country.PL, "Katowice", "Krakowskie Przedmieście", "24", "53");
         var address16 = new Address(Country.PL, "Katowice", "Marszałkowska", "100", "1A");
+        taxOffice3.addAddress(address1);
+        taxOffice3.addAddress(address2);
+        taxOffice3.addAddress(address4);
+        taxOffice3.addAddress(address6);
+        taxOffice3.addAddress(address8);
+        taxOffice4.addAddress(address2);
+        taxOffice5.addAddress(address4);
+        taxOffice6.addAddress(address6);
+        taxOffice7.addAddress(address8);
+        taxOffice8.addAddress(address10);
+        taxOffice9.addAddress(address12);
+        taxOffice10.addAddress(address14);
+        taxOffice11.addAddress(address16);
+        taxOffice4.addAddress(address2);
+        taxOffice5.addAddress(address4);
     }
 
     @Override
@@ -61,5 +76,6 @@ public class Application extends javafx.application.Application {
 
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.show();
+
     }
 }

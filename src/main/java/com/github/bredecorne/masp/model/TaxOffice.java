@@ -15,32 +15,15 @@ public class TaxOffice implements Serializable {
 
     // Ekstensja
     private static HashSet<TaxOffice> taxOffices = new HashSet<>();
+    
     // Atrybuty wymagane
     private final String name;
-    // Asocjacje jeden-do-wiele (po stronie jeden)
-    private Address address;
-
-
-    /**
-     * Konstruktor tworzący nowy obiekt TaxOffice z podaną nazwą i adresem.
-     *
-     * @param name    Nazwa urzędu skarbowego (nie może być pusta).
-     * @param address Adres urzędu skarbowego (nie może być null).
-     * @throws IllegalArgumentException Jeśli nazwa jest pusta lub adres jest null.
-     */
-    public TaxOffice(String name, Address address) {
-        if (name.isEmpty() || address == null) {
-            throw new IllegalArgumentException();
-        }
-        this.name = name;
-        this.address = address;
-
-        taxOffices.add(this); // Dodaje do ekstensji
-    }
+    
+    // Asocjacje jeden-do-wiele (po stronie wiele)
+    private final HashSet<Address> addresses = new HashSet<>();
 
     /**
      * Konstruktor tworzący nowy obiekt TaxOffice z podaną nazwą.
-     * Adres pozostaje nieustawiony (null).
      *
      * @param name Nazwa urzędu skarbowego (nie może być pusta).
      * @throws IllegalArgumentException Jeśli nazwa jest pusta.
@@ -66,26 +49,32 @@ public class TaxOffice implements Serializable {
         return name;
     }
 
-    public Address getAddress() {
-        return address;
+    public HashSet<Address> getAddresses() {
+        return new HashSet<>(addresses);
     }
 
     /**
-     * Zmienia adres, dla którego właściwy jest urząd.
-     * <p>
-     * Dopuszcza zmianę tylko, jeżeli adres nie jest taki sam jak aktualny oraz, jeżeli dostarczana jest wartość inna
-     * niż null, wywołuje metodę tworzącą asocjację po stronie adresu.
-     * </p>
-     *
-     * @param address Obiekt typu adres, dla którego właściwy jest urząd lub wartość null, reprezentująca brak
-     *                właściwości.
+     * Tworzy nowe powiązanie z adresem.
+     * Wywołuje analogiczną metodę po stronie adresu.
+     * @param address Adres, niebędący wartością null.
      */
-    public void setAddress(Address address) {
-        if (!(address == this.address)) {
-            this.address = address;
-            if (address != null) {
-                address.addTaxOffice(this);
-            }
+    public void addAddress(Address address) {
+        if (address == null) { throw new IllegalArgumentException(); }
+        if (!addresses.contains(address)) {
+            addresses.add(address);
+            address.setTaxOffice(this);
+        }
+    }
+
+    /**
+     * Usuwa powiązanie z adresem.
+     * @param address Adres, z którym istnieje już powiązanie.
+     */
+    public void removeAddress(Address address) {
+        if (address == null) { throw new IllegalArgumentException(); }
+        if (addresses.contains(address)) {
+            addresses.remove(address);
+            address.setTaxOffice(null);
         }
     }
 }
