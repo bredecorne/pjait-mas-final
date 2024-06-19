@@ -1,35 +1,21 @@
 package com.github.bredecorne.masp;
 
-import com.github.bredecorne.masp.model.*;
-import com.github.bredecorne.masp.model.persons.LegalPerson;
-import com.github.bredecorne.masp.model.taxes.Tax;
-import com.github.bredecorne.masp.utils.Repository;
+import com.github.bredecorne.masp.model.Address;
+import com.github.bredecorne.masp.model.Country;
+import com.github.bredecorne.masp.model.TaxOffice;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.security.PrivateKey;
-import java.time.LocalDate;
 
 public class Application extends javafx.application.Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("tax-office-change-address.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1300, 700);
-        stage.setTitle("TaxMate");
-        stage.setScene(scene);
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        stage.show();
-    }
-
     public static void main(String[] args) {
         populateWithRandomData();
         launch();
     }
-    
+
     private static void populateWithRandomData() {
         var taxOffice1 = new TaxOffice("Urząd Skarbowy nr 1 w Lipinkach-Łużyckich");
         var taxOffice2 = new TaxOffice("Urząd Skarbowy nr 2 dla Rzeszów-Półudnie w Rzeszowie");
@@ -60,5 +46,20 @@ public class Application extends javafx.application.Application {
         var address12 = new Address(Country.SK, "Ołomuniec", "Rynek", "7A", "2");
         var address14 = new Address(Country.PL, "Katowice", "Krakowskie Przedmieście", "24", "53");
         var address16 = new Address(Country.PL, "Katowice", "Marszałkowska", "100", "1A");
+    }
+
+    @Override
+    public void start(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("tax-office-change-address.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load(), 1300, 700);
+        stage.setTitle("TaxMate");
+
+        stage.setScene(scene);
+        stage.setMinHeight(500);
+        stage.setMinWidth(900);
+
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        stage.show();
     }
 }

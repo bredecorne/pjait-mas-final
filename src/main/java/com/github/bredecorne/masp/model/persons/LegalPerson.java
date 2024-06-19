@@ -5,7 +5,7 @@ import com.github.bredecorne.masp.model.Status;
 import java.math.BigDecimal;
 
 public class LegalPerson extends Person {
-    
+
     // Atrybuty wymagane
     private boolean reducedTax;
 
@@ -22,7 +22,7 @@ public class LegalPerson extends Person {
      * @param reducedTax            Wartość logiczna – przyjmuje true, jeżeli klient korzysta z ulgi w podatku;
      *                              false w przeciwnym razie
      */
-    public LegalPerson(String name, Status status, BigDecimal feeRate, 
+    public LegalPerson(String name, Status status, BigDecimal feeRate,
                        boolean preferential, BigDecimal preferentialAttribute, boolean reducedTax) {
         super(name, status, feeRate, preferential, preferentialAttribute);
         this.reducedTax = reducedTax;

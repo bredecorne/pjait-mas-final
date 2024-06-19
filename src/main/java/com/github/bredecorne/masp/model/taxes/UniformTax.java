@@ -3,7 +3,7 @@ package com.github.bredecorne.masp.model.taxes;
 import java.math.BigDecimal;
 
 public class UniformTax extends Tax {
-    private BigDecimal value;
+    private final BigDecimal value;
 
     public UniformTax(BigDecimal value) {
         super();
@@ -12,7 +12,7 @@ public class UniformTax extends Tax {
 
     /**
      * Oblicza wartość podatku zgodnie ze skalą liniową.
-     * 
+     *
      * @param untaxedIncome Kwota, od której zostanie obliczona wartość podatku.
      * @return Wartość podatku.
      */

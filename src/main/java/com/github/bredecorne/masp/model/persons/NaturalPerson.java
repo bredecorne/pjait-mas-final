@@ -5,7 +5,7 @@ import com.github.bredecorne.masp.model.Status;
 import java.math.BigDecimal;
 
 public class NaturalPerson extends Person {
-    
+
     // Atrybuty wymagane
     private boolean uniformTax;
 
@@ -22,7 +22,7 @@ public class NaturalPerson extends Person {
      * @param uniformTax            Wartość logiczna – przyjmuje true, jeżeli klient korzysta z podatku liniowego;
      *                              false w przeciwnym razie
      */
-    public NaturalPerson(String name, Status status, BigDecimal feeRate, 
+    public NaturalPerson(String name, Status status, BigDecimal feeRate,
                          boolean preferential, BigDecimal preferentialAttribute, boolean uniformTax) {
         super(name, status, feeRate, preferential, preferentialAttribute);
         this.uniformTax = uniformTax;

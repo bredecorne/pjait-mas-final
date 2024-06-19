@@ -16,7 +16,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="panel" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.bredecorne.masp.controller.TaxOfficeChangeAddressController" stylesheets="@styles.css">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" styleClass="panel" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.bredecorne.masp.controller.TaxOfficeChangeAddressController">
+
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
@@ -29,14 +30,22 @@
             </menus>
         </MenuBar>
     </top>
+
     <left>
-        <VBox prefWidth="269.0" BorderPane.alignment="CENTER" style="-fx-background-color: #F8F9F9;">
+        <VBox prefWidth="500.0" style="-fx-background-color: #F8F9F9;" BorderPane.alignment="CENTER">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Urzędy podatkowe" />
-                <TableView fx:id="taxOfficeTable" VBox.vgrow="ALWAYS" styleClass="no-header">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2, b" text="Urzędy podatkowe">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="80.0" />
+               </VBox.margin></Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="p" text="Wyświetlaj urzędy podatkowe oraz modyfikuj ich zakres właściwości terytorialnej." wrappingWidth="400.0" />
+                <TableView fx:id="taxOfficeTable" styleClass="no-header" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="taxOfficeTableColumn" prefWidth="269.0" text="" resizable="false"/>
+                        <TableColumn fx:id="taxOfficeTableColumn" prefWidth="269.0" resizable="false" text="" />
                     </columns>
+               <VBox.margin>
+                  <Insets bottom="80.0" top="60.0" />
+               </VBox.margin>
                 </TableView>
             </children>
             <padding>
@@ -44,34 +53,38 @@
             </padding>
         </VBox>
     </left>
-    <right>
-        <VBox prefWidth="347.0" BorderPane.alignment="CENTER">
+   <center>
+        <VBox prefWidth="347.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Dodaj adres, dla którego urząd jest właściwy" />
-                <GridPane>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Dodaj adres, dla którego urząd jest właściwy">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="80.0" />
+               </VBox.margin></Text>
+                <GridPane hgap="10.0" vgap="10.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                  <ColumnConstraints />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
                         <HBox spacing="10.0" GridPane.rowIndex="0">
                             <children>
-                                <ComboBox fx:id="addressCountryComboBox" prefWidth="75.0" styleClass="split-menu-btn" />
-                                <ComboBox fx:id="addressCityComboBox" prefWidth="220.0" styleClass="split-menu-btn" />
+                                <ComboBox fx:id="addressCountryComboBox" maxWidth="Infinity" styleClass="split-menu-btn" />
+                                <ComboBox fx:id="addressCityComboBox" maxWidth="430.0" styleClass="split-menu-btn" HBox.hgrow="ALWAYS" />
                             </children>
                         </HBox>
                         <HBox spacing="10.0" GridPane.rowIndex="1">
                             <children>
-                                <ComboBox fx:id="addressStreetComboBox" prefWidth="150.0" styleClass="split-menu-btn" />
-                                <ComboBox fx:id="addressHouseNumberComboBox" prefWidth="150.0" styleClass="split-menu-btn" />
-                                <ComboBox fx:id="addressApartmentNumberComboBox" prefWidth="150.0" styleClass="split-menu-btn" />
+                                <ComboBox fx:id="addressStreetComboBox" maxWidth="Infinity" prefWidth="300.0" styleClass="split-menu-btn" />
+                                <ComboBox fx:id="addressHouseNumberComboBox" maxWidth="Infinity" prefWidth="100.0" styleClass="split-menu-btn" />
+                                <ComboBox fx:id="addressApartmentNumberComboBox" maxWidth="Infinity" prefWidth="100.0" styleClass="split-menu-btn" />
                             </children>
                         </HBox>
-                        <Button fx:id="addressSendButton" mnemonicParsing="false" styleClass="btn" text="Zatwierdź" GridPane.rowIndex="2" />
+                        <Button fx:id="addressSendButton" mnemonicParsing="false" styleClass="btn" text="Zatwierdź" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
             </children>
@@ -79,5 +92,5 @@
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
         </VBox>
-    </right>
+   </center>
 </BorderPane>

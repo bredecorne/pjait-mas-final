@@ -5,7 +5,7 @@ import com.github.bredecorne.masp.model.Status;
 import java.math.BigDecimal;
 
 public class ImperfectLegalPerson extends Person {
-    
+
     /**
      * Konstruktor dla obiektu typu ImperfectLegalPerson.
      *
@@ -17,9 +17,9 @@ public class ImperfectLegalPerson extends Person {
      *                              określa atrybut reprezentujący nadaną zniżkę; w przeciwnym razie określa atrybut
      *                              reprezentujący liczbę zebranych punktów lojalnościowych.
      */
-    public ImperfectLegalPerson(String name, Status status, BigDecimal feeRate, boolean preferential, 
+    public ImperfectLegalPerson(String name, Status status, BigDecimal feeRate, boolean preferential,
                                 BigDecimal preferentialAttribute) {
         super(name, status, feeRate, preferential, preferentialAttribute);
     }
-    
+
 }

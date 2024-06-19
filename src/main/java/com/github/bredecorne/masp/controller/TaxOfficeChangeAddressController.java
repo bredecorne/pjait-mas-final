@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class TaxOfficeChangeAddressController {
 
-    
+
     @FXML
     private TableView<TaxOffice> taxOfficeTable;
     @FXML
@@ -29,23 +29,23 @@ public class TaxOfficeChangeAddressController {
     private ComboBox<String> addressApartmentNumberComboBox;
     @FXML
     private ComboBox<String> addressStreetComboBox;
-    
+
     @FXML
     private Button addressSendButton;
-    
+
     @FXML
     private MenuItem saveMenu;
     @FXML
     private MenuItem loadMenu;
 
-    
+
     @FXML
     public void initialize() {
-        
+
         // Initial data
         populateTaxOfficesTable();
         populateAddressCountryComboBox();
-        
+
         // Listeners
         setupCountryComboBoxListener();
         setupCityComboBoxListener();
@@ -54,7 +54,7 @@ public class TaxOfficeChangeAddressController {
         setupAddressSendButtonListener();
         setupSaveMenuItemListener();
         setupLoadMenuItemListener();
-        
+
     }
 
     private void populateTaxOfficesTable() {
@@ -174,7 +174,7 @@ public class TaxOfficeChangeAddressController {
             }
         });
     }
-    
+
     private void setupAddressHouseNumberComboBoxListener() {
         addressHouseNumberComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
@@ -185,7 +185,7 @@ public class TaxOfficeChangeAddressController {
             }
         });
     }
-    
+
     private void setupAddressSendButtonListener() {
         addressSendButton.setOnAction(event -> {
             String selectedCountry = addressCountryComboBox.getSelectionModel().getSelectedItem();
@@ -224,12 +224,12 @@ public class TaxOfficeChangeAddressController {
                             "Nie wskazano urzędu podatkowego.");
                 }
             } else {
-                showAlert(Alert.AlertType.INFORMATION, "Błąd", null, 
+                showAlert(Alert.AlertType.INFORMATION, "Błąd", null,
                         "Wybrany adres jest nieprawidłowy.");
             }
         });
     }
-    
+
     private void setupSaveMenuItemListener() {
         saveMenu.setOnAction(event -> {
             Repository.serialize();

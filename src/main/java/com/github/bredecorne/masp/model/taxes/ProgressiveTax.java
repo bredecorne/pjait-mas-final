@@ -8,13 +8,15 @@ public class ProgressiveTax extends Tax {
 
     public ProgressiveTax(NavigableMap<BigDecimal, BigDecimal> value) {
         super();
-        if (value == null) { throw new IllegalArgumentException(); }
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
         this.value = value;
     }
 
     /**
      * Oblicza wartość podatku zgodnie ze skalą progresywną – korzysta z progów podatkowych.
-     * 
+     *
      * @param untaxedIncome Kwota, od której zostanie obliczona wartość podatku.
      * @return Wartość podatku.
      */

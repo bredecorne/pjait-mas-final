@@ -1,6 +1,9 @@
 package com.github.bredecorne.masp.utils;
 
-import com.github.bredecorne.masp.model.*;
+import com.github.bredecorne.masp.model.AccountManager;
+import com.github.bredecorne.masp.model.Address;
+import com.github.bredecorne.masp.model.PeriodEntrySet;
+import com.github.bredecorne.masp.model.TaxOffice;
 import com.github.bredecorne.masp.model.persons.Person;
 import com.github.bredecorne.masp.model.taxes.Tax;
 
@@ -41,7 +44,7 @@ public class Repository {
         try (FileInputStream fileInputStream = new FileInputStream(REPOSITORY_FILEPATH)) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             DataTransferObject dto = (DataTransferObject) objectInputStream.readObject();
-            
+
             Person.setPersons(dto.persons);
             Tax.setTaxes(dto.taxes);
             AccountManager.setAccountManagers(dto.accountManagers);
@@ -53,8 +56,9 @@ public class Repository {
         }
     }
 
-    
-    private record DataTransferObject(HashSet<Person> persons, HashSet<Tax> taxes, HashSet<AccountManager> accountManagers,
+
+    private record DataTransferObject(HashSet<Person> persons, HashSet<Tax> taxes,
+                                      HashSet<AccountManager> accountManagers,
                                       HashSet<Address> addresses, HashSet<PeriodEntrySet> periodEntrySets,
                                       HashSet<TaxOffice> taxOffices) implements Serializable {
     }
