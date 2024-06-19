@@ -1,6 +1,7 @@
 package com.github.bredecorne.masp.model.persons;
 
 import com.github.bredecorne.masp.model.Address;
+import com.github.bredecorne.masp.model.PeriodEntrySet;
 import com.github.bredecorne.masp.model.Status;
 
 import java.io.Serializable;
@@ -11,15 +12,20 @@ public abstract class Person implements Serializable {
 
     // Atrybuty klasowe
     private static BigDecimal PREFERENTIAL_THRESHOLD = BigDecimal.valueOf(10000);
+    
     // Ekstensja
     private static HashSet<Person> persons = new HashSet<>();
+    
     // Asocjacje wiele-do-wiele
     private final HashSet<Address> addresses = new HashSet<>();
+    private final HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
+    
     // Atrybuty wymagane
     private final String name;
     private Status status;
     private BigDecimal feeRate;
     private boolean preferential;
+    
     // Atrybuty opcjonalne
     private BigDecimal loyaltyPoints; // Może być użyty przez obiekt, dla którego preferential przyjmuje wartość true
     private BigDecimal discountRate; // Może być użyty przez obiekt, dla którego preferential przyjmuje wartość false
@@ -178,5 +184,21 @@ public abstract class Person implements Serializable {
 
     public HashSet<Address> getAddresses() {
         return new HashSet<>(addresses);
+    }
+    
+    public void addPeriodEntrySet(PeriodEntrySet periodEntrySet) {
+        if (periodEntrySet == null) { throw new IllegalArgumentException(); }
+        if (!periodEntrySets.contains(periodEntrySet)) {
+            periodEntrySets.add(periodEntrySet);
+            periodEntrySet.setPerson(this);
+        }
+    }
+    
+    public void replacePeriodEntrySet(PeriodEntrySet periodEntrySet, Person person) {
+        if (person == null) { throw new IllegalArgumentException(); }
+        if (periodEntrySets.contains(periodEntrySet)) {
+            periodEntrySets.remove(periodEntrySet);
+            periodEntrySet.setPerson(person);
+        }
     }
 }

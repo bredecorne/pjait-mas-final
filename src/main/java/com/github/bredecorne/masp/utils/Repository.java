@@ -10,6 +10,9 @@ import com.github.bredecorne.masp.model.taxes.Tax;
 import java.io.*;
 import java.util.HashSet;
 
+/**
+ * Klasa narzędziowa, służąca do odczytu i zapisu wszystkich klas tworzących aplikację.
+ */
 public class Repository {
 
     private static final String REPOSITORY_FILEPATH = "repository.data";
@@ -56,7 +59,7 @@ public class Repository {
         }
     }
 
-
+    
     private record DataTransferObject(HashSet<Person> persons, HashSet<Tax> taxes,
                                       HashSet<AccountManager> accountManagers,
                                       HashSet<Address> addresses, HashSet<PeriodEntrySet> periodEntrySets,

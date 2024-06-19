@@ -9,22 +9,39 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.HashSet;
 
+
+/**
+ * Klasa reprezentująca zbiór wpisów księgowych dla danego okresu i osoby.
+ * <p>
+ * Zawiera informacje o datach początkowej i końcowej, osobie, której dotyczy zbiór,
+ * oraz wpisach księgowych (Entry). Umożliwia zarządzanie powiązaniami z menedżerami kont i podatkami.
+ * </p>
+ */
 public class PeriodEntrySet implements Serializable {
 
     // Ekstensja
     private static HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
+
     // Atrybuty wymagane
     private final HashSet<Entry> entries = new HashSet<>();
     private final LocalDate dateFrom;
     private final LocalDate dateTo;
+
     // Asocjacje wiele-do-wiele
     private final HashSet<AccountManager> accountManagers = new HashSet<>();
     private final HashSet<Tax> taxes = new HashSet<>();
 
     // Asocjacje jeden-do-wiele (po stronie jeden)
-    private final Person person;
+    private Person person;
 
 
+    /**
+     * Konstruktor tworzący nowy obiekt PeriodEntrySet.
+     *
+     * @param dateFrom Data początkowa okresu, którego wpisy będą zawierały się w danym zbiorze.
+     * @param dateTo   Data końcowa okresu, którego wpisy będą zawierały się w danym zbiorze.
+     * @param person   Osoba – klient, który jest właścicielem transakcji.
+     */
     public PeriodEntrySet(LocalDate dateFrom, LocalDate dateTo, Person person) {
         if (dateFrom == null || dateTo == null ||
                 person == null) {
@@ -46,7 +63,17 @@ public class PeriodEntrySet implements Serializable {
     }
 
     public HashSet<Entry> getEntries() {
-        return entries;
+        return new HashSet<>(entries);
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        if (person == null) { throw new IllegalArgumentException(); }
+        this.person = person;
+        person.addPeriodEntrySet(this);
     }
 
     /**
@@ -61,6 +88,31 @@ public class PeriodEntrySet implements Serializable {
         return String.join(person.getName(), "-", dateFrom.toString(), "-TO-", dateTo.toString());
     }
 
+    public LocalDate getDateFrom() {
+        return dateFrom;
+    }
+
+    public LocalDate getDateTo() {
+        return dateTo;
+    }
+
+    public HashSet<AccountManager> getAccountManagers() {
+        return new HashSet<>(accountManagers);
+    }
+
+    public HashSet<Tax> getTaxes() {
+        return new HashSet<>(taxes);
+    }
+
+    /**
+     * Oblicza sumę wartości negatywnych lub pozytywnych wszystkich wpisów księgowych, które są zawarte w danym
+     * zbiorze.
+     *
+     * @param positive Wartość logiczna, przyjmująca wartość true, kiedy metoda ma obliczyć sumę wartości dodatnich;
+     *                 false – w przeciwnym razie, kiedy ma obliczyć sumę wartości ujemnych.
+     * @return Suma wartości negatywnych lub pozytywnych wszystkich wpisów księgowych, które są zawarte w danym
+     * zbiorze.
+     */
     private BigDecimal sum(boolean positive) {
         var sum = new BigDecimal(BigInteger.ZERO);
 
@@ -75,30 +127,69 @@ public class PeriodEntrySet implements Serializable {
         return sum;
     }
 
+    /**
+     * Oblicza przychód.
+     *
+     * @return Przychód uzyskany w danym okresie księgowym.
+     */
     public BigDecimal getRevenue() {
         return sum(true);
     }
 
+    /**
+     * Oblicza koszt uzyskania przychodu.
+     *
+     * @return Koszt uzyskania przychodu w danym okresie księgowym.
+     */
     public BigDecimal getExpenses() {
         return sum(false);
     }
 
+    /**
+     * Oblicza dochód.
+     *
+     * @return Dochód uzyskany w danym okresie księgowym.
+     */
     public BigDecimal getIncome() {
         return getRevenue().subtract(getExpenses());
     }
 
+    /**
+     * Oblicza wartość podatku.
+     *
+     * @param applicableTax Podatek, który ma zastosowanie dla danego okresu księgowego.
+     * @return Wartość podatku obliczonego od dochodu osiągniętego w danym okresie księgowym.
+     */
     public BigDecimal getTax(Tax applicableTax) {
         return applicableTax.calculateTax(getIncome());
     }
 
+    /**
+     * Oblicza dochód po opodatkowaniu.
+     *
+     * @param applicableTax Podatek, który ma zastosowanie dla danego okresu księgowego.
+     * @return Wartość dochodu w danym okresie księgowym pomniejszona o wartość podatku.
+     */
     public BigDecimal getAfterTaxIncome(Tax applicableTax) {
         return getIncome().subtract(applicableTax.calculateTax(getIncome()));
     }
 
+    /**
+     * Oblicza wartość prowizji od dochodu po opodatkowaniu.
+     *
+     * @param applicableTax Podatek, który ma zastosowanie dla danego okresu księgowego.
+     * @return Wartość prowizji dla danego okresu księgowego.
+     */
     public BigDecimal getFee(Tax applicableTax) {
         return getAfterTaxIncome(applicableTax).multiply(BigDecimal.ONE.subtract(person.getFeeRate()));
     }
 
+    /**
+     * Tworzy związek powiązania z podatkiem.
+     * Wywołuje analogiczną metodę po stronie podatku.
+     *
+     * @param tax Obiekt reprezentujący podatek, niebędący wartością null.
+     */
     public void addTax(Tax tax) {
         if (tax == null) {
             throw new IllegalArgumentException();
@@ -109,6 +200,12 @@ public class PeriodEntrySet implements Serializable {
         }
     }
 
+    /**
+     * Usuwa związek powiązania z podatkiem.
+     * Wywołuje analogiczną metodę po stronie podatku.
+     *
+     * @param tax Podatek, dla którego istnieje już powiązanie.
+     */
     public void removeTax(Tax tax) {
         if (taxes.contains(tax)) {
             taxes.remove(tax);
@@ -116,6 +213,12 @@ public class PeriodEntrySet implements Serializable {
         }
     }
 
+    /**
+     * Tworzy związek powiązania z menedżerem konta.
+     * Wywołuje analogiczną metodę po stronie menedżera konta.
+     *
+     * @param accountManager Obiekt reprezentujący menedżera konta, niebędący wartością null.
+     */
     public void addAccountManager(AccountManager accountManager) {
         if (accountManager == null) {
             throw new IllegalArgumentException();
@@ -126,6 +229,12 @@ public class PeriodEntrySet implements Serializable {
         }
     }
 
+    /**
+     * Usuwa związek powiązania z menedżerem konta.
+     * Wywołuje analogiczną metodę po stronie menedżera konta.
+     *
+     * @param accountManager Menedżer konta, dla którego istnieje już powiązanie.
+     */
     public void removeAccountManager(AccountManager accountManager) {
         if (accountManagers.contains(accountManager)) {
             accountManagers.remove(accountManager);
@@ -133,12 +242,26 @@ public class PeriodEntrySet implements Serializable {
         }
     }
 
+    /**
+     * Tworzy i dodaje nowy obiekt wpisu księgowego.
+     *
+     * @param date          Data, kiedy odbyła się transakcja będąca podstawą wpisu księgowego.
+     * @param value         Wartość wpisu księgowego – ujemna lub dodatnia.
+     * @param justification Opcjonalne uzasadnienie biznesowe dokonanej transakcji.
+     */
     public void addEntry(LocalDate date, BigDecimal value, String justification) {
         entries.add(
                 new Entry(date, value, justification)
         );
     }
 
+    /**
+     * Tworzy i dodaje nowy obiekt wpisu księgowego z pominięciem zadania opcjonalnego atrybutu uzasadnienia
+     * biznesowego.
+     *
+     * @param date  Data, kiedy odbyła się transakcja będąca podstawą wpisu księgowego.
+     * @param value Wartość wpisu księgowego – ujemna lub dodatnia.
+     */
     public void addEntry(LocalDate date, BigDecimal value) {
         entries.add(
                 new Entry(date, value)

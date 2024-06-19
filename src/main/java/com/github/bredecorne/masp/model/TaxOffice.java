@@ -3,6 +3,14 @@ package com.github.bredecorne.masp.model;
 import java.io.Serializable;
 import java.util.HashSet;
 
+
+/**
+ * Klasa reprezentująca urząd podatkowy.
+ * <p>
+ * Zawiera podstawowe dane urzędu – nazwę i jego adres.
+ * Zarządza również ekstensją wszystkich utworzonych obiektów.
+ * </p>
+ */
 public class TaxOffice implements Serializable {
 
     // Ekstensja
@@ -13,6 +21,13 @@ public class TaxOffice implements Serializable {
     private Address address;
 
 
+    /**
+     * Konstruktor tworzący nowy obiekt TaxOffice z podaną nazwą i adresem.
+     *
+     * @param name    Nazwa urzędu skarbowego (nie może być pusta).
+     * @param address Adres urzędu skarbowego (nie może być null).
+     * @throws IllegalArgumentException Jeśli nazwa jest pusta lub adres jest null.
+     */
     public TaxOffice(String name, Address address) {
         if (name.isEmpty() || address == null) {
             throw new IllegalArgumentException();
@@ -23,6 +38,13 @@ public class TaxOffice implements Serializable {
         taxOffices.add(this); // Dodaje do ekstensji
     }
 
+    /**
+     * Konstruktor tworzący nowy obiekt TaxOffice z podaną nazwą.
+     * Adres pozostaje nieustawiony (null).
+     *
+     * @param name Nazwa urzędu skarbowego (nie może być pusta).
+     * @throws IllegalArgumentException Jeśli nazwa jest pusta.
+     */
     public TaxOffice(String name) {
         if (name.isEmpty()) {
             throw new IllegalArgumentException();
@@ -31,7 +53,7 @@ public class TaxOffice implements Serializable {
 
         taxOffices.add(this); // Dodaje do ekstensji
     }
-
+    
     public static HashSet<TaxOffice> getTaxOffices() {
         return new HashSet<TaxOffice>(taxOffices);
     }
