@@ -3,6 +3,7 @@ package com.github.bredecorne.masp.model;
 import com.github.bredecorne.masp.model.persons.Person;
 import com.github.bredecorne.masp.model.taxes.Tax;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ public class PeriodEntrySet {
     
     // Asocjacje wiele-do-wiele
     private final HashSet<AccountManager> accountManagers = new HashSet<>();
+    private final HashSet<Tax> taxes = new HashSet<>();
     
     // Asocjacje jeden-do-wiele (po stronie jeden)
     private final Person person;
@@ -86,6 +88,21 @@ public class PeriodEntrySet {
 
     public BigDecimal getFee(Tax applicableTax) {
         return getAfterTaxIncome(applicableTax).multiply(BigDecimal.ONE.subtract(person.getFeeRate()));
+    }
+    
+    public void addTax(Tax tax) {
+        if (tax == null) { throw new IllegalArgumentException(); }
+        if (!taxes.contains(tax)) {
+            taxes.add(tax);
+            tax.addPeriodEntrySet(this);
+        }
+    }
+    
+    public void removeTax(Tax tax) {
+        if (taxes.contains(tax)) {
+            taxes.remove(tax);
+            tax.removePeriodEntrySet(this);
+        }
     }
     
     

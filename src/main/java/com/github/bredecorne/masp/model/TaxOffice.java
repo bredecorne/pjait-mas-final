@@ -1,5 +1,7 @@
 package com.github.bredecorne.masp.model;
 
+import com.github.bredecorne.masp.model.taxes.Tax;
+
 import java.util.HashSet;
 
 public class TaxOffice {
@@ -52,5 +54,9 @@ public class TaxOffice {
                 address.addTaxOffice(this);
             }
         }
+    }
+    
+    public static HashSet<TaxOffice> getTaxOffices() {
+        return new HashSet<TaxOffice>(taxOffices);
     }
 }

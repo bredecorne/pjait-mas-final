@@ -132,5 +132,8 @@ public class Address {
         var pattern = Pattern.compile("^(\\d+)([A-Z]{0,2})([/-]\\d+)?([A-Z]{0,2})?$");
         return pattern.matcher(number).matches();
     }
-    
+
+    public static HashSet<Address> getAddresses() {
+        return new HashSet<>(addresses);
+    }
 }

@@ -160,4 +160,8 @@ public abstract class Person {
     public HashSet<Address> getAddresses() {
         return new HashSet<>(addresses);
     }
+    
+    public static HashSet<Person> getPersons() {
+        return new HashSet<>(persons);
+    }
 }
