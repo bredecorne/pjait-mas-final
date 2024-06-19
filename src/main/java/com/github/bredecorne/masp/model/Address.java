@@ -10,15 +10,19 @@ public class Address implements Serializable {
 
     // Ekstensja
     private static HashSet<Address> addresses = new HashSet<>();
+    
     // Asocjacje wiele-do-wiele
     private final HashSet<Person> persons = new HashSet<>();
+    
     // Asocjacje jeden-do-wiele (po stronie wiele)
     private final HashSet<TaxOffice> taxOffices = new HashSet<>();
+    
     // Atrybuty wymagane
     private final Country country;
     private final String city;
     private final String street;
     private final String houseNumber;
+    
     // Atrybuty opcjonalne
     private String apartmentNumber;
 

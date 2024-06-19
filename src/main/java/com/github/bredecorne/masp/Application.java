@@ -52,12 +52,12 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("tax-office-change-address.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 1300, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         stage.setTitle("TaxMate");
 
         stage.setScene(scene);
-        stage.setMinHeight(500);
-        stage.setMinWidth(900);
+        stage.setMinHeight(600);
+        stage.setMinWidth(1000);
 
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.show();
