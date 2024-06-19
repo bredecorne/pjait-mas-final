@@ -42,4 +42,13 @@ public class AccountManager {
     public static HashSet<AccountManager> getAccountManagers() {
         return new HashSet<>(accountManagers);
     }
+    
+    public PeriodEntrySet findPeriodEntrySet(String abbreviation) {
+        for (PeriodEntrySet periodEntrySet : periodEntrySets) {
+            if (periodEntrySet.getAbbreviation().equals(abbreviation)) {
+                return periodEntrySet;
+            }
+        }
+        return null;
+    }
 }
