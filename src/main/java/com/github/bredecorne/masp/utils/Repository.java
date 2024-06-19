@@ -5,19 +5,18 @@ import com.github.bredecorne.masp.model.persons.Person;
 import com.github.bredecorne.masp.model.taxes.Tax;
 
 import java.io.*;
-import java.lang.invoke.VarHandle;
 import java.util.HashSet;
 
 public class Repository {
 
-    private static final String REPOSITORY_FILENAME = "repository.data";
+    private static final String REPOSITORY_FILEPATH = "repository.data";
 
     /**
      * Tworzy nowy obiekt, przechowujący ogół ekstensji klas składających się na aplikację oraz dokonuje ich
      * serializacji do pliku określonego zmienną REPOSITORY_FILENAME
      */
     public static void serialize() {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(REPOSITORY_FILENAME)) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(REPOSITORY_FILEPATH)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(
                     new DataTransferObject(
@@ -39,7 +38,7 @@ public class Repository {
      * ekstensje wszystkich klas, które ją posiadają i są obsługiwane przez serializację.
      */
     public static void deserialize() {
-        try (FileInputStream fileInputStream = new FileInputStream(REPOSITORY_FILENAME)) {
+        try (FileInputStream fileInputStream = new FileInputStream(REPOSITORY_FILEPATH)) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             DataTransferObject dto = (DataTransferObject) objectInputStream.readObject();
             

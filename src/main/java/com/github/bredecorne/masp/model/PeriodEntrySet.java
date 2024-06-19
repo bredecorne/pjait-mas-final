@@ -141,7 +141,7 @@ public class PeriodEntrySet implements Serializable {
         );
     }
 
-    private class Entry {
+    private class Entry implements Serializable {
         
         // Atrybuty wymagane
         private final LocalDate date;

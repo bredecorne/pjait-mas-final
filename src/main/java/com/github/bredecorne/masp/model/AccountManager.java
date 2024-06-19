@@ -56,4 +56,12 @@ public class AccountManager implements Serializable {
         }
         return null;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
 }
