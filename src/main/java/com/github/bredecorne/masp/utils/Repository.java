@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.HashSet;
 
 /**
- * Klasa narzędziowa, służąca do odczytu i zapisu wszystkich klas tworzących aplikację.
+ * Klasa narzędziowa, służąca do odczytu i zapisu wszystkich ekstensji użytych w aplikacji.
  */
 public class Repository {
 

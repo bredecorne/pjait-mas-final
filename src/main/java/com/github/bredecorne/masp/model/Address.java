@@ -38,6 +38,8 @@ public class Address implements Serializable {
         this.houseNumber = houseNumber;
         this.apartmentNumber = apartmentNumber;
         this.taxOffice = taxOffice;
+
+        addresses.add(this); // Dodaje do ekstensji
     }
 
     public Address(Country country, String city, String street, String houseNumber, String apartmentNumber) {

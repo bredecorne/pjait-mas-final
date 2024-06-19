@@ -277,6 +277,7 @@ public class TaxOfficeChangeAddressController {
             Repository.deserialize();
             showAlert(Alert.AlertType.INFORMATION, "Zaktualizowano dane", null,
                     "Pobrano dane z repozytorium.");
+            populateTaxOfficesTable();
         });
     }
 
