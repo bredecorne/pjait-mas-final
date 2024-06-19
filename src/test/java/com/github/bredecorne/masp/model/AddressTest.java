@@ -11,6 +11,7 @@ class AddressTest {
     @Test
     void createsAddressAndAssociatesItWithATaxOffice() {
         var country = Country.PL;
+        var expectedCountry = "PL";
         var city = "Poznań";
         var street = "Łąkowa";
         var houseNumber = "4A";
@@ -23,7 +24,7 @@ class AddressTest {
         address.addTaxOffice(taxOffice);
 
         assertAll(
-                () -> assertEquals(country, address.getCountry()),
+                () -> assertEquals(expectedCountry, address.getCountry()),
                 () -> assertEquals(city, address.getCity()),
                 () -> assertEquals(street, address.getStreet()),
                 () -> assertEquals(houseNumber, address.getHouseNumber()),
@@ -36,6 +37,7 @@ class AddressTest {
     @Test
     void modifiesAddressAssociationWithATaxOffice() {
         var country = Country.PL;
+        var expectedCountry = "PL";
         var city = "Poznań";
         var street = "Łąkowa";
         var houseNumber = "4A";
@@ -48,7 +50,7 @@ class AddressTest {
         address.removeTaxOffice(taxOffice);
 
         assertAll(
-                () -> assertEquals(country, address.getCountry()),
+                () -> assertEquals(expectedCountry, address.getCountry()),
                 () -> assertEquals(city, address.getCity()),
                 () -> assertEquals(street, address.getStreet()),
                 () -> assertEquals(houseNumber, address.getHouseNumber()),

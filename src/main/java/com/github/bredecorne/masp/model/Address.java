@@ -110,8 +110,8 @@ public class Address implements Serializable {
         }
     }
 
-    public Country getCountry() {
-        return country;
+    public String getCountry() {
+        return country.toString();
     }
 
     public String getCity() {

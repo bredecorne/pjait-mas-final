@@ -51,11 +51,11 @@ public class Application extends javafx.application.Application {
         var taxOffice20 = new TaxOffice("Urząd Skarbowy w Toruniu");
         var address1 = new Address(Country.PL, "Katowice", "Urzędowa", "1A", "4");
         var address2 = new Address(Country.PL, "Katowice", "Warszawska", "13", "22");
-        var address4 = new Address(Country.PL, "Katowice", "Mickiewicza", "3", "10");
-        var address6 = new Address(Country.PL, "Katowice", "Słowackiego", "1", "45");
+        var address4 = new Address(Country.DE, "Katowice", "Mickiewicza", "3", "10");
+        var address6 = new Address(Country.SK, "Katowice", "Słowackiego", "1", "45");
         var address8 = new Address(Country.PL, "Katowice", "Grzybowska", "32", "17");
         var address10 = new Address(Country.PL, "Katowice", "Puławska", "123", "4A");
-        var address12 = new Address(Country.PL, "Katowice", "Rynek", "7", "2");
+        var address12 = new Address(Country.CZ, "Katowice", "Rynek", "7", "2");
         var address14 = new Address(Country.PL, "Katowice", "Krakowskie Przedmieście", "24", "53");
         var address16 = new Address(Country.PL, "Katowice", "Marszałkowska", "100", "1A");
     }
