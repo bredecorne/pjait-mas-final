@@ -7,6 +7,7 @@ import com.github.bredecorne.masp.utils.Repository;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(fxmlLoader.load(), 1300, 700);
         stage.setTitle("TaxMate");
         stage.setScene(scene);
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.show();
     }
 
