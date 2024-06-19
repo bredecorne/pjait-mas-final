@@ -4,20 +4,21 @@ import com.github.bredecorne.masp.model.persons.Person;
 import com.github.bredecorne.masp.model.taxes.Tax;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-public class PeriodEntrySet {
+public class PeriodEntrySet implements Serializable {
     
     // Atrybuty wymagane
-    private HashSet<Entry> entries;
+    private final HashSet<Entry> entries = new HashSet<>();
     private final LocalDate dateFrom;
     private final LocalDate dateTo;
     
     // Ekstensja
-    private static final HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
+    private static HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
     
     // Asocjacje wiele-do-wiele
     private final HashSet<AccountManager> accountManagers = new HashSet<>();
@@ -27,24 +28,18 @@ public class PeriodEntrySet {
     private final Person person;
 
 
-    public PeriodEntrySet(LocalDate dateFrom, LocalDate dateTo, Person person, HashSet<Entry> entries) {
+    public PeriodEntrySet(LocalDate dateFrom, LocalDate dateTo, Person person) {
         if (dateFrom == null || dateTo == null || 
-            person == null || entries == null) { throw new IllegalArgumentException(); }
+            person == null) { throw new IllegalArgumentException(); }
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.person = person;
-        this.entries = entries;
         
         periodEntrySets.add(this); // Dodaje do ekstensji
     }
 
     public HashSet<Entry> getEntries() {
         return entries;
-    }
-
-    public void setEntries(HashSet<Entry> entries) {
-        if (entries == null) { throw new IllegalArgumentException(); }
-        this.entries = entries;
     }
 
     /**
@@ -130,7 +125,23 @@ public class PeriodEntrySet {
         return new HashSet<>(periodEntrySets);
     }
 
-    public class Entry {
+    public static void setPeriodEntrySets(HashSet<PeriodEntrySet> periodEntrySets) {
+        PeriodEntrySet.periodEntrySets = periodEntrySets;
+    }
+    
+    public void addEntry(LocalDate date, BigDecimal value, String justification) {
+        entries.add(
+                new Entry(date, value, justification)
+        );
+    }
+
+    public void addEntry(LocalDate date, BigDecimal value) {
+        entries.add(
+                new Entry(date, value)
+        );
+    }
+
+    private class Entry {
         
         // Atrybuty wymagane
         private final LocalDate date;

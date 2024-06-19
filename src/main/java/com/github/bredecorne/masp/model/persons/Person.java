@@ -3,10 +3,11 @@ package com.github.bredecorne.masp.model.persons;
 import com.github.bredecorne.masp.model.Address;
 import com.github.bredecorne.masp.model.Status;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 
-public abstract class Person {
+public abstract class Person implements Serializable {
     
     // Atrybuty wymagane
     private String name;
@@ -22,7 +23,7 @@ public abstract class Person {
     private static BigDecimal PREFERENTIAL_THRESHOLD = BigDecimal.valueOf(10000);
     
     // Ekstensja
-    private static final HashSet<Person> persons = new HashSet<>();
+    private static HashSet<Person> persons = new HashSet<>();
     
     // Asocjacje wiele-do-wiele
     private final HashSet<Address> addresses = new HashSet<>();
@@ -163,5 +164,9 @@ public abstract class Person {
     
     public static HashSet<Person> getPersons() {
         return new HashSet<>(persons);
+    }
+
+    public static void setPersons(HashSet<Person> persons) {
+        Person.persons = persons;
     }
 }

@@ -2,10 +2,11 @@ package com.github.bredecorne.masp.model;
 
 import com.github.bredecorne.masp.model.persons.Person;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
-public class Address {
+public class Address implements Serializable {
     
     // Atrybuty wymagane
     private Country country;
@@ -14,7 +15,7 @@ public class Address {
     private String apartmentNumber;
     
     // Ekstensja
-    private static final HashSet<Address> addresses = new HashSet<>();
+    private static HashSet<Address> addresses = new HashSet<>();
 
     // Asocjacje wiele-do-wiele
     private final HashSet<Person> persons = new HashSet<>();
@@ -130,10 +131,14 @@ public class Address {
      */
     private static boolean isHouseNumberInvalid(String number) {
         var pattern = Pattern.compile("^(\\d+)([A-Z]{0,2})([/-]\\d+)?([A-Z]{0,2})?$");
-        return pattern.matcher(number).matches();
+        return !pattern.matcher(number).matches();
     }
 
     public static HashSet<Address> getAddresses() {
         return new HashSet<>(addresses);
+    }
+
+    public static void setAddresses(HashSet<Address> addresses) {
+        Address.addresses = addresses;
     }
 }

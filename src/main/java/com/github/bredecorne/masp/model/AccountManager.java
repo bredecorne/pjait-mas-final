@@ -1,15 +1,16 @@
 package com.github.bredecorne.masp.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 
-public class AccountManager {
+public class AccountManager implements Serializable {
     
     // Atrybuty wymagane
     private String name;
     private Status status;
     
     // Ekstensja
-    private static final HashSet<AccountManager> accountManagers = new HashSet<>();
+    private static HashSet<AccountManager> accountManagers = new HashSet<>();
     
     // Asocjacje wiele-do-wiele
     private final HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
@@ -42,7 +43,11 @@ public class AccountManager {
     public static HashSet<AccountManager> getAccountManagers() {
         return new HashSet<>(accountManagers);
     }
-    
+
+    public static void setAccountManagers(HashSet<AccountManager> accountManagers) {
+        AccountManager.accountManagers = accountManagers;
+    }
+
     public PeriodEntrySet findPeriodEntrySet(String abbreviation) {
         for (PeriodEntrySet periodEntrySet : periodEntrySets) {
             if (periodEntrySet.getAbbreviation().equals(abbreviation)) {

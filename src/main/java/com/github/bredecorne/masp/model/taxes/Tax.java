@@ -2,13 +2,14 @@ package com.github.bredecorne.masp.model.taxes;
 
 import com.github.bredecorne.masp.model.PeriodEntrySet;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 
-public abstract class Tax {
+public abstract class Tax implements Serializable {
     
     // Ekstensja
-    private final static HashSet<Tax> taxes = new HashSet<>();
+    private static HashSet<Tax> taxes = new HashSet<>();
     
     // Asocjacje wiele-do-wiele
     private final HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
@@ -18,7 +19,7 @@ public abstract class Tax {
 
     
     public Tax() {
-        taxes.add(this);
+        taxes.add(this); // Dodaje do ekstensji.
     }
     
     
@@ -35,5 +36,13 @@ public abstract class Tax {
             periodEntrySets.remove(periodEntrySet);
             periodEntrySet.removeTax(this);
         }
+    }
+    
+    public static HashSet<Tax> getTaxes() {
+        return new HashSet<Tax>(taxes);
+    }
+
+    public static void setTaxes(HashSet<Tax> taxes) {
+        Tax.taxes = taxes;
     }
 }

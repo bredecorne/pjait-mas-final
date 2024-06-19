@@ -1,16 +1,15 @@
 package com.github.bredecorne.masp.model;
 
-import com.github.bredecorne.masp.model.taxes.Tax;
-
+import java.io.Serializable;
 import java.util.HashSet;
 
-public class TaxOffice {
+public class TaxOffice implements Serializable {
     
     // Atrybuty wymagane
     private String name;
     
     // Ekstensja
-    private static final HashSet<TaxOffice> taxOffices = new HashSet<>();
+    private static HashSet<TaxOffice> taxOffices = new HashSet<>();
     
     // Asocjacje jeden-do-wiele (po stronie jeden)
     private Address address;
@@ -27,6 +26,8 @@ public class TaxOffice {
     public TaxOffice(String name) {
         if (name.isEmpty()) { throw new IllegalArgumentException(); }
         this.name = name;
+        
+        taxOffices.add(this); // Dodaje do ekstensji
     }
 
     
@@ -58,5 +59,9 @@ public class TaxOffice {
     
     public static HashSet<TaxOffice> getTaxOffices() {
         return new HashSet<TaxOffice>(taxOffices);
+    }
+
+    public static void setTaxOffices(HashSet<TaxOffice> taxOffices) {
+        TaxOffice.taxOffices = taxOffices;
     }
 }
