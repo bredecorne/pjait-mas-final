@@ -11,6 +11,7 @@ class AddressTest {
     @Test
     void createsAddressAndAssociatesItWithATaxOffice() {
         var country = Country.PL;
+        var city = "Poznań";
         var street = "Łąkowa";
         var houseNumber = "4A";
         var apartmentNumber = "20";
@@ -18,11 +19,12 @@ class AddressTest {
         var taxOffices = new HashSet<TaxOffice>();
         taxOffices.add(taxOffice);
         
-        var address = new Address(country, street, houseNumber, apartmentNumber);
+        var address = new Address(country, city, street, houseNumber, apartmentNumber);
         address.addTaxOffice(taxOffice);
 
         assertAll(
                 () -> assertEquals(country, address.getCountry()),
+                () -> assertEquals(city, address.getCity()),
                 () -> assertEquals(street, address.getStreet()),
                 () -> assertEquals(houseNumber, address.getHouseNumber()),
                 () -> assertEquals(apartmentNumber, address.getApartmentNumber()),
@@ -34,18 +36,20 @@ class AddressTest {
     @Test
     void modifiesAddressAssociationWithATaxOffice() {
         var country = Country.PL;
+        var city = "Poznań";
         var street = "Łąkowa";
         var houseNumber = "4A";
         var apartmentNumber = "20";
         var taxOffice = new TaxOffice("Urząd Skarbowy nr 10 w Lipinkach-Łużyckich");
         var taxOffices = new HashSet<TaxOffice>();
 
-        var address = new Address(country, street, houseNumber, apartmentNumber);
+        var address = new Address(country, city, street, houseNumber, apartmentNumber);
         address.addTaxOffice(taxOffice);
         address.removeTaxOffice(taxOffice);
 
         assertAll(
                 () -> assertEquals(country, address.getCountry()),
+                () -> assertEquals(city, address.getCity()),
                 () -> assertEquals(street, address.getStreet()),
                 () -> assertEquals(houseNumber, address.getHouseNumber()),
                 () -> assertEquals(apartmentNumber, address.getApartmentNumber()),

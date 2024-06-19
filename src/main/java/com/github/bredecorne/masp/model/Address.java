@@ -10,8 +10,11 @@ public class Address implements Serializable {
     
     // Atrybuty wymagane
     private Country country;
+    private String city;
     private String street;
     private String houseNumber;
+    
+    // Atrybuty opcjonalne
     private String apartmentNumber;
     
     // Ekstensja
@@ -23,16 +26,26 @@ public class Address implements Serializable {
     // Asocjacje jeden-do-wiele (po stronie wiele)
     private final HashSet<TaxOffice> taxOffices = new HashSet<>();
 
-    
-    public Address(Country country, String street, String houseNumber, String apartmentNumber) {
-        if (country == null || street == null || isHouseNumberInvalid(houseNumber) ||
-                isHouseNumberInvalid(apartmentNumber)) { throw new IllegalArgumentException(); }
-        
+    public Address(Country country, String city, String street, String houseNumber, String apartmentNumber) {
+        if (country == null || city == null || street == null || 
+            isHouseNumberInvalid(houseNumber)) { throw new IllegalArgumentException(); }
         this.country = country;
+        this.city = city;
         this.street = street;
         this.houseNumber = houseNumber;
         this.apartmentNumber = apartmentNumber;
         
+        addresses.add(this); // Dodaje do ekstensji
+    }
+
+    public Address(Country country, String city, String street, String houseNumber) {
+        if (country == null || city == null || street == null ||
+                isHouseNumberInvalid(houseNumber)) { throw new IllegalArgumentException(); }
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
+
         addresses.add(this); // Dodaje do ekstensji
     }
 
@@ -99,6 +112,10 @@ public class Address implements Serializable {
 
     public Country getCountry() {
         return country;
+    }
+
+    public String getCity() {
+        return city;
     }
 
     public String getStreet() {

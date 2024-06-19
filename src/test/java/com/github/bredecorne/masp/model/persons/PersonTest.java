@@ -70,6 +70,7 @@ class PersonTest {
 
     @Test
     void accessesExtensionSuccessfully() {
+        Person.setPersons(new HashSet<>());
         var person1 = new NaturalPerson("Agata Skowronek", Status.INACTIVE, new BigDecimal("4.4"),
                 false, BigDecimal.ZERO, false);
         var person2 = new LegalPerson("Krzak Ogrodnictwo", Status.ACTIVE, new BigDecimal("9.1"),

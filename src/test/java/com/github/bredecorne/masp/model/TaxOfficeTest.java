@@ -19,7 +19,7 @@ class TaxOfficeTest {
     @Test
     void createsTaxOfficesAndAssociatesItWithAnAddress() {
         var name = "Urząd Skarbowy nr 10 w Lipinkach-Łużyckich";
-        var address = new Address(Country.PL, "Łąkowa", "4A", "20");
+        var address = new Address(Country.PL, "Gdynia", "Łąkowa", "4A", "20");
         
         var taxOffice = new TaxOffice(name, address);
         
@@ -32,8 +32,8 @@ class TaxOfficeTest {
     @Test
     void modifiesTaxOfficeAssociationWithAnAddress() {
         var name = "Urząd Skarbowy nr 10 w Lipinkach-Łużyckich";
-        var address = new Address(Country.PL, "Łąkowa", "4A", "20");
-        var address1 = new Address(Country.PL, "Betonowa", "70B", "1");
+        var address = new Address(Country.PL, "Bedoń Przykościelny", "Łąkowa", "4A", "20");
+        var address1 = new Address(Country.PL, "Wieś Stara", "Betonowa", "70B", "1");
 
         var taxOffice = new TaxOffice(name, address);
         taxOffice.setAddress(address1);
