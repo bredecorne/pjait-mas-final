@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Objects;
-
+import java.util.stream.Collectors;
 
 public class TaxOfficeChangeAddressController {
 
@@ -38,6 +38,8 @@ public class TaxOfficeChangeAddressController {
 
     @FXML
     private Button addressSendButton;
+    @FXML
+    private Button addressRemoveButton;
 
     @FXML
     private MenuItem saveMenu;
@@ -59,6 +61,7 @@ public class TaxOfficeChangeAddressController {
         setupSaveMenuItemListener();
         setupLoadMenuItemListener();
         setupTaxOfficeTableListener();
+        setupAddressRemoveButtonListener();
     }
 
     private void populateTaxOfficesTable() {
@@ -72,7 +75,16 @@ public class TaxOfficeChangeAddressController {
     }
 
     private void populateAddressesTable(TaxOffice taxOffice) {
-        addressesTableColumn.setCellValueFactory(new PropertyValueFactory<>("street"));
+        addressesTableColumn.setCellValueFactory(cellData -> {
+            Address address = cellData.getValue();
+            String fullAddress = String.format("%s %s, %s, %s/%s",
+                    address.getCountry(),
+                    address.getCity(),
+                    address.getStreet(),
+                    address.getHouseNumber(),
+                    address.getApartmentNumber());
+            return new javafx.beans.property.SimpleStringProperty(fullAddress);
+        });
 
         ObservableList<Address> addressesObservableList = FXCollections.observableArrayList(
                 taxOffice.getAddresses()
@@ -88,7 +100,7 @@ public class TaxOfficeChangeAddressController {
                 addresses.stream()
                         .map(Address::getCountry)
                         .distinct()
-                        .toList()
+                        .collect(Collectors.toList())
         );
 
         addressCountryComboBox.setItems(countries);
@@ -102,49 +114,55 @@ public class TaxOfficeChangeAddressController {
                         .filter(address -> address.getCountry().equals(selectedCountry))
                         .map(Address::getCity)
                         .distinct()
-                        .toList()
+                        .collect(Collectors.toList())
         );
 
         addressCityComboBox.setItems(cities);
     }
 
-    private void populateStreetComboBox(String selectedCity) {
+    private void populateStreetComboBox(String selectedCountry, String selectedCity) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> streets = FXCollections.observableArrayList(
                 addresses.stream()
-                        .filter(address -> address.getCity().equals(selectedCity))
+                        .filter(address -> address.getCountry().equals(selectedCountry) && 
+                                address.getCity().equals(selectedCity))
                         .map(Address::getStreet)
                         .distinct()
-                        .toList()
+                        .collect(Collectors.toList())
         );
 
         addressStreetComboBox.setItems(streets);
     }
 
-    private void populateAddressHouseNumberComboBox(String selectedStreet) {
+    private void populateAddressHouseNumberComboBox(String selectedCountry, String selectedCity, String selectedStreet) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> houseNumbers = FXCollections.observableArrayList(
                 addresses.stream()
-                        .filter(address -> address.getStreet().equals(selectedStreet))
+                        .filter(address -> address.getCountry().equals(selectedCountry) && 
+                                address.getCity().equals(selectedCity) && 
+                                address.getStreet().equals(selectedStreet))
                         .map(Address::getHouseNumber)
                         .distinct()
-                        .toList()
+                        .collect(Collectors.toList())
         );
 
         addressHouseNumberComboBox.setItems(houseNumbers);
     }
 
-    private void populateAddressApartmentNumberComboBox(String selectedHouseNumber) {
+    private void populateAddressApartmentNumberComboBox(String selectedCountry, String selectedCity, String selectedStreet, String selectedHouseNumber) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> apartmentNumbers = FXCollections.observableArrayList(
                 addresses.stream()
-                        .filter(address -> address.getHouseNumber().equals(selectedHouseNumber))
+                        .filter(address -> address.getCountry().equals(selectedCountry) && 
+                                address.getCity().equals(selectedCity) && 
+                                address.getStreet().equals(selectedStreet) && 
+                                address.getHouseNumber().equals(selectedHouseNumber))
                         .map(Address::getApartmentNumber)
                         .distinct()
-                        .toList()
+                        .collect(Collectors.toList())
         );
 
         addressApartmentNumberComboBox.setItems(apartmentNumbers);
@@ -171,8 +189,9 @@ public class TaxOfficeChangeAddressController {
                 addressHouseNumberComboBox.setItems(null);
                 addressApartmentNumberComboBox.setItems(null);
             }
-            if (newVal != null) {
-                populateStreetComboBox(newVal);
+            String selectedCountry = addressCountryComboBox.getSelectionModel().getSelectedItem();
+            if (newVal != null && selectedCountry != null) {
+                populateStreetComboBox(selectedCountry, newVal);
             }
         });
     }
@@ -183,8 +202,10 @@ public class TaxOfficeChangeAddressController {
                 addressHouseNumberComboBox.setItems(null);
                 addressApartmentNumberComboBox.setItems(null);
             }
-            if (newVal != null) {
-                populateAddressHouseNumberComboBox(newVal);
+            String selectedCountry = addressCountryComboBox.getSelectionModel().getSelectedItem();
+            String selectedCity = addressCityComboBox.getSelectionModel().getSelectedItem();
+            if (newVal != null && selectedCountry != null && selectedCity != null) {
+                populateAddressHouseNumberComboBox(selectedCountry, selectedCity, newVal);
             }
         });
     }
@@ -194,8 +215,11 @@ public class TaxOfficeChangeAddressController {
             if (!Objects.equals(newVal, oldVal)) {
                 addressApartmentNumberComboBox.setItems(null);
             }
-            if (newVal != null) {
-                populateAddressApartmentNumberComboBox(newVal);
+            String selectedCountry = addressCountryComboBox.getSelectionModel().getSelectedItem();
+            String selectedCity = addressCityComboBox.getSelectionModel().getSelectedItem();
+            String selectedStreet = addressStreetComboBox.getSelectionModel().getSelectedItem();
+            if (newVal != null && selectedCountry != null && selectedCity != null && selectedStreet != null) {
+                populateAddressApartmentNumberComboBox(selectedCountry, selectedCity, selectedStreet, newVal);
             }
         });
     }
@@ -223,10 +247,11 @@ public class TaxOfficeChangeAddressController {
                 TaxOffice selectedTaxOffice = taxOfficeTable.getSelectionModel().getSelectedItem();
                 if (selectedTaxOffice != null) {
                     selectedTaxOffice.addAddress(selectedAddress);
-                    
+
                     if (selectedTaxOffice.getAddresses().contains(selectedAddress)) {
                         showAlert(Alert.AlertType.INFORMATION, "Nadano właściwość", null,
                                 "Dodano nowy adres dla danego urzędu.");
+                        populateAddressesTable(selectedTaxOffice);
                     }
                 } else {
                     showAlert(Alert.AlertType.INFORMATION, "Błąd", null,
@@ -262,7 +287,24 @@ public class TaxOfficeChangeAddressController {
             }
         });
     }
-    
+
+    private void setupAddressRemoveButtonListener() {
+        addressRemoveButton.setOnAction(event -> {
+            if (taxOfficeTable.getSelectionModel().getSelectedItem() != null) {
+                TaxOffice selectedTaxOffice = taxOfficeTable.getSelectionModel().getSelectedItem();
+                if (addressesTable.getSelectionModel().getSelectedItem() != null) {
+                    selectedTaxOffice.removeAddress(addressesTable.getSelectionModel().getSelectedItem());
+                    showAlert(Alert.AlertType.INFORMATION, "Usunięto", null,
+                            "Usunięto właściwość urzędu podatkowego dla adresu.");
+                    populateAddressesTable(selectedTaxOffice);
+                }
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Błąd", "null",
+                        "Nie wskazano urzędu podatkowego lub adresu.");
+            }
+        });
+    }
+
     public void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

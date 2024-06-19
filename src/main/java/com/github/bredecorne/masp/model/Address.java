@@ -95,7 +95,9 @@ public class Address implements Serializable {
 
     public void setTaxOffice(TaxOffice taxOffice) {
         this.taxOffice = taxOffice;
-        taxOffice.addAddress(this);
+        if (taxOffice != null) {
+            taxOffice.addAddress(this);
+        }
     }
 
     /**
