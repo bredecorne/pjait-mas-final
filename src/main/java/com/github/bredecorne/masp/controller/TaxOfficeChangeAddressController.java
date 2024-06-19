@@ -2,6 +2,7 @@ package com.github.bredecorne.masp.controller;
 
 import com.github.bredecorne.masp.model.Address;
 import com.github.bredecorne.masp.model.TaxOffice;
+import com.github.bredecorne.masp.utils.Repository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -51,6 +52,8 @@ public class TaxOfficeChangeAddressController {
         setupStreetComboBoxListener();
         setupAddressHouseNumberComboBoxListener();
         setupAddressSendButtonListener();
+        setupSaveMenuItemListener();
+        setupLoadMenuItemListener();
         
     }
 
@@ -207,34 +210,47 @@ public class TaxOfficeChangeAddressController {
                 if (selectedTaxOffice != null) {
                     selectedTaxOffice.setAddress(selectedAddress);
 
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Nadano właściwość urzędowi podatkowemu");
-                    alert.setHeaderText(null);
-                    alert.setContentText(String.format("Adres dla urzędu %s został zaktualizowany, nowy adres to:\n" +
-                            "%s, %s, %s, %s/%s.", 
-                            selectedTaxOffice.getName(), 
-                            selectedTaxOffice.getAddress().getCountry(),
-                            selectedTaxOffice.getAddress().getCity(),
-                            selectedTaxOffice.getAddress().getStreet(),
-                            selectedTaxOffice.getAddress().getHouseNumber(),
-                            selectedTaxOffice.getAddress().getApartmentNumber()));
-                    alert.showAndWait();
+                    showAlert(Alert.AlertType.INFORMATION, "Nadano właściwość", null,
+                            String.format("Adres dla urzędu %s został zaktualizowany, nowy adres to:\n" +
+                                            "%s, %s, %s, %s/%s.",
+                                    selectedTaxOffice.getName(),
+                                    selectedTaxOffice.getAddress().getCountry(),
+                                    selectedTaxOffice.getAddress().getCity(),
+                                    selectedTaxOffice.getAddress().getStreet(),
+                                    selectedTaxOffice.getAddress().getHouseNumber(),
+                                    selectedTaxOffice.getAddress().getApartmentNumber()));
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Błąd");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Nie wybrano urzędu podatkowego.");
-                    alert.showAndWait();
+                    showAlert(Alert.AlertType.INFORMATION, "Błąd", null,
+                            "Nie wskazano urzędu podatkowego.");
                 }
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Błąd");
-                alert.setHeaderText(null);
-                alert.setContentText("Wybrany adres jest nieprawidłowy.");
-                alert.showAndWait();
+                showAlert(Alert.AlertType.INFORMATION, "Błąd", null, 
+                        "Wybrany adres jest nieprawidłowy.");
             }
         });
     }
+    
+    private void setupSaveMenuItemListener() {
+        saveMenu.setOnAction(event -> {
+            Repository.serialize();
+            showAlert(Alert.AlertType.INFORMATION, "Zapisano dane", null,
+                    "Zapisano dane do repozytorium.");
+        });
+    }
 
+    private void setupLoadMenuItemListener() {
+        loadMenu.setOnAction(event -> {
+            Repository.deserialize();
+            showAlert(Alert.AlertType.INFORMATION, "Zaktualizowano dane", null,
+                    "Pobrano dane z repozytorium.");
+        });
+    }
 
+    public void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
 }
