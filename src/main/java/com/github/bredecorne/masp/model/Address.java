@@ -67,15 +67,32 @@ public class Address {
         }
     }
 
+    /**
+     * Tworzy związek powiązania z obiektem reprezentującym osobę.
+     * <p>
+     *     Wywołuje analogiczną metodę po stronie osoby.
+     * </p>
+     * @param person Osoba, wartość niebędąca null.
+     */
     public void addPerson(Person person) {
+        if (person == null) { throw new IllegalArgumentException(); }
         if (!persons.contains(person)) {
             persons.add(person);
+            person.addAddress(this);
         }
     }
-    
+
+    /**
+     * Usuwa związek powiązania z obiektem reprezentującym osobę.
+     * <p>
+     *     Wywołuje analogiczną metodę po stronie osoby.
+     * </p>
+     * @param person Osoba, wobec której powiązanie ma zostać usunięte.
+     */
     public void removePerson(Person person) {
         if (persons.contains(person)) {
             persons.remove(person);
+            person.removeAddress(this);
         }
     }
 

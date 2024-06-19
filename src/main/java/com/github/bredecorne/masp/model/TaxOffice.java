@@ -18,6 +18,8 @@ public class TaxOffice {
         if (name.isEmpty() || address == null) { throw new IllegalArgumentException(); }
         this.name = name;
         this.address = address;
+        
+        taxOffices.add(this); // Dodaje do ekstensji
     }
 
     public TaxOffice(String name) {

@@ -127,4 +127,37 @@ public abstract class Person {
         if (preferentialThreshold.compareTo(BigDecimal.ZERO) < 0) { throw new IllegalArgumentException(); }
         PREFERENTIAL_THRESHOLD = preferentialThreshold;
     }
+
+    /**
+     * Tworzy związek powiązania z obiektem reprezentującym adres.
+     * <p>
+     *     Wywołuje analogiczną metodę po stronie adresu.
+     * </p>
+     * @param address Adres, wartość niebędąca null.
+     */
+    public void addAddress(Address address) {
+        if (address == null) { throw new IllegalArgumentException(); }
+        if (!addresses.contains(address)) {
+            addresses.add(address);
+            address.addPerson(this);
+        }
+    }
+
+    /**
+     * Usuwa związek powiązania z obiektem reprezentującym adres.
+     * <p>
+     *     Wywołuje analogiczną metodę po stronie adresu.
+     * </p>
+     * @param address Adres, wobec którego powiązanie ma zostać usunięte.
+     */
+    public void removeAddress(Address address) {
+        if (addresses.contains(address)) {
+            addresses.remove(address);
+            address.removePerson(this);
+        }
+    }
+
+    public HashSet<Address> getAddresses() {
+        return new HashSet<>(addresses);
+    }
 }
