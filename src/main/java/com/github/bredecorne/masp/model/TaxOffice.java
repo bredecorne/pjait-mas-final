@@ -25,6 +25,7 @@ public class TaxOffice {
         this.name = name;
     }
 
+    
     public String getName() {
         return name;
     }
@@ -33,10 +34,21 @@ public class TaxOffice {
         return address;
     }
 
+    /**
+     * Zmienia adres, dla którego właściwy jest urząd.
+     * <p>
+     *      Dopuszcza zmianę tylko, jeżeli adres nie jest taki sam jak aktualny oraz, jeżeli dostarczana jest wartość inna
+     *      niż null, wywołuje metodę tworzącą asocjację po stronie adresu.
+     * </p>
+     * @param address Obiekt typu adres, dla którego właściwy jest urząd lub wartość null, reprezentująca brak
+     *                właściwości.
+     */
     public void setAddress(Address address) {
-        if (!(address == null || address == this.address)) {
+        if (!(address == this.address)) {
             this.address = address;
-            address.addTaxOffice(this);
+            if (address != null) {
+                address.addTaxOffice(this);
+            }
         }
     }
 }

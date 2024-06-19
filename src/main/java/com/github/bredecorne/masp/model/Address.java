@@ -24,29 +24,52 @@ public class Address {
 
     
     public Address(Country country, String street, String houseNumber, String apartmentNumber) {
-        if (country == null || street == null || validateHouseOrApartmentNumber(houseNumber) ||
-                validateHouseOrApartmentNumber(apartmentNumber)) { throw new IllegalArgumentException(); }
+        if (country == null || street == null || isHouseNumberInvalid(houseNumber) ||
+                isHouseNumberInvalid(apartmentNumber)) { throw new IllegalArgumentException(); }
         
         this.country = country;
         this.street = street;
         this.houseNumber = houseNumber;
         this.apartmentNumber = apartmentNumber;
         
-        addresses.add(this);
+        addresses.add(this); // Dodaje do ekstensji
     }
-    
-    public void addPerson(Person person) {
-        if (!persons.contains(person)) {
-            persons.add(person);
-        }
-    }
-    
+
+    /**
+     * Dodaje nowe powiązanie z obiektem reprezentującym urząd podatkowy.
+     * <p>
+     *     Wywołuje analogiczną metodę po stronie urzędu podatkowego i tworzy powiązanie tylko, jeżeli powiązanie
+     *     po stronie urzędu podatkowego zostało utworzone poprawnie.
+     * </p>
+     * @param taxOffice Urząd podatkowy, niebędący wartością null.
+     */
     public void addTaxOffice(TaxOffice taxOffice) {
-        if (!taxOffices.contains(taxOffice)) {
+        if (!taxOffices.contains(taxOffice) && taxOffice != null) {
             taxOffice.setAddress(this);
             if (taxOffice.getAddress() == this) {
                 taxOffices.add(taxOffice);
             }
+        }
+    }
+
+    /**
+     * Usuwa powiązanie z urzędem podatkowym.
+     * <p>
+     *     Wywołuje analogiczną metodę po stronie urzędu podatkowego i ustala wartość adresu po stronie urzędu
+     *     na wartość null.
+     * </p>
+     * @param taxOffice Urząd podatkowy, niebędący wartością null.
+     */
+    public void removeTaxOffice(TaxOffice taxOffice) {
+        if (taxOffices.contains(taxOffice)) {
+            taxOffices.remove(taxOffice);
+            taxOffice.setAddress(null);
+        }
+    }
+
+    public void addPerson(Person person) {
+        if (!persons.contains(person)) {
+            persons.add(person);
         }
     }
     
@@ -55,16 +78,42 @@ public class Address {
             persons.remove(person);
         }
     }
-    
-    public void removeTaxOffice(TaxOffice taxOffice) {
-        if (taxOffices.contains(taxOffice)) {
-            taxOffices.remove(taxOffice);
-        }
+
+    public Country getCountry() {
+        return country;
     }
-    
-    private static boolean validateHouseOrApartmentNumber(String number) {
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public String getApartmentNumber() {
+        return apartmentNumber;
+    }
+
+    public HashSet<Person> getPersons() {
+        return new HashSet<>(persons);
+    }
+
+    public HashSet<TaxOffice> getTaxOffices() {
+        return new HashSet<>(taxOffices);
+    }
+
+    /**
+     * Metoda pomocnicza – weryfikuje poprawność zadanego numeru domu lub mieszkania.
+     * <p>
+     *     Uznaje wartości poprawne w szczególności ciągi szczególne typu "14A", "14AB", "12/3AB". 
+     * </p>
+     * @param number Numer domu lub mieszkania w formacie String.
+     * @return Wartość logiczna – true, jeżeli numer domu lub mieszkania jest niepoprawny; false przeciwnie.
+     */
+    private static boolean isHouseNumberInvalid(String number) {
         var pattern = Pattern.compile("^(\\d+)([A-Z]{0,2})([/-]\\d+)?([A-Z]{0,2})?$");
-        return !pattern.matcher(number).matches();
+        return pattern.matcher(number).matches();
     }
     
 }
