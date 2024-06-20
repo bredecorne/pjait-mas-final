@@ -3,6 +3,7 @@ package com.github.bredecorne.masp.model;
 import com.github.bredecorne.masp.model.persons.Person;
 import com.github.bredecorne.masp.model.taxes.Tax;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,8 +29,10 @@ public class PeriodEntrySet implements Serializable {
     private final LocalDate dateTo;
 
     // Asocjacje wiele-do-wiele
-    private final HashSet<AccountManager> accountManagers = new HashSet<>();
     private final HashSet<Tax> taxes = new HashSet<>();
+    
+    // Asocjacja kwalifikowana
+    private AccountManager accountManager;
 
     // Asocjacje jeden-do-wiele (po stronie jeden)
     private Person person;
@@ -104,10 +107,6 @@ public class PeriodEntrySet implements Serializable {
 
     public LocalDate getDateTo() {
         return dateTo;
-    }
-
-    public HashSet<AccountManager> getAccountManagers() {
-        return new HashSet<>(accountManagers);
     }
 
     public HashSet<Tax> getTaxes() {
@@ -223,32 +222,25 @@ public class PeriodEntrySet implements Serializable {
         }
     }
 
-    /**
-     * Tworzy związek powiązania z menedżerem konta.
-     * Wywołuje analogiczną metodę po stronie menedżera konta.
-     *
-     * @param accountManager Obiekt reprezentujący menedżera konta, niebędący wartością null.
-     */
-    public void addAccountManager(AccountManager accountManager) {
-        if (accountManager == null) {
-            throw new IllegalArgumentException();
-        }
-        if (!accountManagers.contains(accountManager)) {
-            accountManagers.add(accountManager);
-            accountManager.addPeriodEntrySet(this);
-        }
-    }
 
     /**
-     * Usuwa związek powiązania z menedżerem konta.
-     * Wywołuje analogiczną metodę po stronie menedżera konta.
-     *
-     * @param accountManager Menedżer konta, dla którego istnieje już powiązanie.
+     * Zwraca powiązany obiekt menedżera konta.
+     * @return Menedżer konta, z którym istnieje powiązanie.
      */
-    public void removeAccountManager(AccountManager accountManager) {
-        if (accountManagers.contains(accountManager)) {
-            accountManagers.remove(accountManager);
-            accountManager.removePeriodEntrySet(this);
+    public AccountManager getAccountManager() {
+        return accountManager;
+    }
+
+
+    /**
+     * Ustawia powiązanie z obiektem menedżera konta.
+     * @param accountManager Menedżer konta, niebędący wartością null.
+     */
+    public void setAccountManager(AccountManager accountManager) {
+        if (accountManager == null) { throw new IllegalArgumentException(); }
+        if (accountManager != this.accountManager) {
+            this.accountManager = accountManager;
+            accountManager.addPeriodEntrySet(this);
         }
     }
 

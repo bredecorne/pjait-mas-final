@@ -41,8 +41,4 @@ public class ProgressiveTax extends Tax {
 
         return tax;
     }
-
-    public NavigableMap<BigDecimal, BigDecimal> getValue() {
-        return value;
-    }
 }

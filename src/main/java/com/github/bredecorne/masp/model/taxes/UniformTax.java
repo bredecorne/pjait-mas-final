@@ -20,8 +20,4 @@ public class UniformTax extends Tax {
     public BigDecimal calculateTax(BigDecimal untaxedIncome) {
         return untaxedIncome.multiply(this.value);
     }
-
-    public BigDecimal getValue() {
-        return value;
-    }
 }

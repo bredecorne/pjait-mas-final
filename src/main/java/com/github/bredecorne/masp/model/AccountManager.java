@@ -1,14 +1,17 @@
 package com.github.bredecorne.masp.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class AccountManager implements Serializable {
 
     // Ekstensja
     private static HashSet<AccountManager> accountManagers = new HashSet<>();
-    // Asocjacje wiele-do-wiele
-    private final HashSet<PeriodEntrySet> periodEntrySets = new HashSet<>();
+    
+    // Asocjacje kwalifikowana
+    private final HashMap<String, PeriodEntrySet> periodEntrySets = new HashMap<>();
+    
     // Atrybuty wymagane
     private final String name;
     private final Status status;
@@ -29,30 +32,44 @@ public class AccountManager implements Serializable {
         AccountManager.accountManagers = accountManagers;
     }
 
+    
+    /**
+     * Dodaje nowe powiązanie z obiektem zbioru wpisów księgowych.
+     * Korzysta z abbreviation jako klucza.
+     * @param periodEntrySet Zbiór wpisów księgowych, niebędący null.
+     */
     public void addPeriodEntrySet(PeriodEntrySet periodEntrySet) {
         if (periodEntrySet == null) {
             throw new IllegalArgumentException();
         }
-        if (!periodEntrySets.contains(periodEntrySet)) {
-            periodEntrySets.add(periodEntrySet);
-            periodEntrySet.addAccountManager(this);
+        if (!periodEntrySets.containsKey(periodEntrySet.getAbbreviation())) {
+            periodEntrySets.put(periodEntrySet.getAbbreviation(),
+                    periodEntrySet);
+            periodEntrySet.setAccountManager(this);
         }
     }
 
+
+    /**
+     * Usuwa powiązanie z obiektem zbioru wpisów księgowych.
+     * @param periodEntrySet Zbiór wpisów księgowych, dla którego istnieje już powiązanie.
+     */
     public void removePeriodEntrySet(PeriodEntrySet periodEntrySet) {
-        if (periodEntrySets.contains(periodEntrySet)) {
-            periodEntrySets.remove(periodEntrySet);
-            periodEntrySet.removeAccountManager(this);
+        if (periodEntrySets.containsKey(periodEntrySet.getAbbreviation())) {
+            periodEntrySets.remove(periodEntrySet.getAbbreviation());
+            periodEntrySet.setAccountManager(this);
         }
     }
 
+
+    /**
+     * Zwraca powiązany zbiór wpisów księgowych na podstawie jego abbreviation (kwalifikatora).
+     * @param abbreviation Atrybut pochodny abbreviation w klasie zbioru wpisów księgowych, wywoływany przez
+     *                     getAbbreviation()
+     * @return Powiązany zbiór wpisów księgowych na podstawie określonego kwalifikatora.
+     */
     public PeriodEntrySet findPeriodEntrySet(String abbreviation) {
-        for (PeriodEntrySet periodEntrySet : periodEntrySets) {
-            if (periodEntrySet.getAbbreviation().equals(abbreviation)) {
-                return periodEntrySet;
-            }
-        }
-        return null;
+        return periodEntrySets.get(abbreviation);
     }
 
     public String getName() {
