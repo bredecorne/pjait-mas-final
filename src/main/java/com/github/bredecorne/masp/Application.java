@@ -38,9 +38,9 @@ public class Application extends javafx.application.Application {
         var taxOffice19 = new TaxOffice("Urząd Skarbowy w Wałbrzychu");
         var taxOffice20 = new TaxOffice("Urząd Skarbowy w Toruniu");
         var address1 = new Address(Country.PL, "Katowice", "Urzędowa", "1A", "4");
-        var address2 = new Address(Country.DE, "Warschau", "Warszawska", "13", "22");
-        var address4 = new Address(Country.DE, "Katowitz", "Mickiewicza", "3", "10");
-        var address6 = new Address(Country.SK, "Katowice", "Słowackiego", "1", "45");
+        var address2 = new Address(Country.DE, "Dresden", "Warszawska", "13", "22");
+        var address4 = new Address(Country.DE, "Bonn", "Mickiewicza", "3", "10");
+        var address6 = new Address(Country.SK, "Jamnik Słowacki", "Słowackiego", "1", "45");
         var address8 = new Address(Country.PL, "Rubaszów Śląski", "Grzybowska", "32", "17");
         var address10 = new Address(Country.PL, "Katowice", "Puławska", "123", "4A");
         var address12 = new Address(Country.SK, "Ołomuniec", "Rynek", "7A", "2");
@@ -73,8 +73,8 @@ public class Application extends javafx.application.Application {
         stage.setTitle("TaxMate");
 
         stage.setScene(scene);
-        stage.setMinHeight(600);
-        stage.setMinWidth(1000);
+        stage.setMinHeight(600); // Określa minimalną wielkość okna
+        stage.setMinWidth(1000); // Określa maksymalną wielkość okna
 
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.show();

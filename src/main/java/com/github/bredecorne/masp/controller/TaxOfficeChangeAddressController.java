@@ -3,7 +3,6 @@ package com.github.bredecorne.masp.controller;
 import com.github.bredecorne.masp.model.Address;
 import com.github.bredecorne.masp.model.TaxOffice;
 import com.github.bredecorne.masp.utils.Repository;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -53,21 +52,21 @@ public class TaxOfficeChangeAddressController {
         populateAddressCountryComboBox();
 
         // Address ComboBox Listeners
-        setupCountryComboBoxListener();
-        setupCityComboBoxListener();
-        setupStreetComboBoxListener();
+        setupAddressCountryComboBoxListener();
+        setupAddressCityComboBoxListener();
+        setupAddressStreetComboBoxListener();
         setupAddressHouseNumberComboBoxListener();
-        
+
         // Address Send Button Listener
         setupAddressSendButtonListener();
-        
+
         // Serialization and Deserialization Listeners
         setupSaveMenuItemListener();
         setupLoadMenuItemListener();
-        
+
         // Tax Office Table Listener
         setupTaxOfficeTableListener();
-        
+
         // Address Remove Button listener
         setupAddressRemoveButtonListener();
     }
@@ -90,6 +89,7 @@ public class TaxOfficeChangeAddressController {
 
     /**
      * Uzupełnia rekordy w tabeli reprezentującej adresy powiązane z wybranym urzędem podatkowym.
+     *
      * @param taxOffice Urząd podatkowy, którego powiązane adresy zostaną wyświetlone
      */
     private void populateAddressesTable(TaxOffice taxOffice) {
@@ -132,10 +132,10 @@ public class TaxOfficeChangeAddressController {
 
     /**
      * Uzupełnia listę, z której można wybrać miasto.
-     * Przedstawia tylko te miasta, dla których wybrano właściwe państwo na podstawie tych, 
+     * Przedstawia tylko te miasta, dla których wybrano właściwe państwo na podstawie tych,
      * które znajdują się w ekstensji klasy urzędu podatkowego.
      */
-    private void populateCityComboBox(String selectedCountry) {
+    private void populateAddressCityComboBox(String selectedCountry) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> cities = FXCollections.observableArrayList(
@@ -152,15 +152,15 @@ public class TaxOfficeChangeAddressController {
 
     /**
      * Uzupełnia listę, z której można wybrać ulicę.
-     * Przedstawia tylko te ulice, dla których wybrano właściwe miasto i państwo na podstawie tych, 
+     * Przedstawia tylko te ulice, dla których wybrano właściwe miasto i państwo na podstawie tych,
      * które znajdują się w ekstensji klasy urzędu podatkowego.
      */
-    private void populateStreetComboBox(String selectedCountry, String selectedCity) {
+    private void populateAddressStreetComboBox(String selectedCountry, String selectedCity) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> streets = FXCollections.observableArrayList(
                 addresses.stream()
-                        .filter(address -> address.getCountry().equals(selectedCountry) && 
+                        .filter(address -> address.getCountry().equals(selectedCountry) &&
                                 address.getCity().equals(selectedCity))
                         .map(Address::getStreet)
                         .distinct()
@@ -170,20 +170,20 @@ public class TaxOfficeChangeAddressController {
         addressStreetComboBox.setItems(streets);
     }
 
-    
+
     /**
      * Uzupełnia listę, z której można wybrać numer domu.
-     * Przedstawia tylko te numery domów, dla których wybrano właściwą ulicę, miasto i państwo na podstawie tych, 
+     * Przedstawia tylko te numery domów, dla których wybrano właściwą ulicę, miasto i państwo na podstawie tych,
      * które znajdują się w ekstensji klasy urzędu podatkowego.
      */
-    private void populateAddressHouseNumberComboBox(String selectedCountry, String selectedCity, 
+    private void populateAddressHouseNumberComboBox(String selectedCountry, String selectedCity,
                                                     String selectedStreet) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> houseNumbers = FXCollections.observableArrayList(
                 addresses.stream()
-                        .filter(address -> address.getCountry().equals(selectedCountry) && 
-                                address.getCity().equals(selectedCity) && 
+                        .filter(address -> address.getCountry().equals(selectedCountry) &&
+                                address.getCity().equals(selectedCity) &&
                                 address.getStreet().equals(selectedStreet))
                         .map(Address::getHouseNumber)
                         .distinct()
@@ -196,18 +196,18 @@ public class TaxOfficeChangeAddressController {
 
     /**
      * Uzupełnia listę, z której można wybrać numer mieszkania.
-     * Przedstawia tylko te numery domów, dla których wybrano właściwy numer domu, ulicę, miasto i państwo na 
+     * Przedstawia tylko te numery domów, dla których wybrano właściwy numer domu, ulicę, miasto i państwo na
      * podstawie tych, które znajdują się w ekstensji klasy urzędu podatkowego.
      */
-    private void populateAddressApartmentNumberComboBox(String selectedCountry, String selectedCity, 
+    private void populateAddressApartmentNumberComboBox(String selectedCountry, String selectedCity,
                                                         String selectedStreet, String selectedHouseNumber) {
         var addresses = Address.getAddresses();
 
         ObservableList<String> apartmentNumbers = FXCollections.observableArrayList(
                 addresses.stream()
-                        .filter(address -> address.getCountry().equals(selectedCountry) && 
-                                address.getCity().equals(selectedCity) && 
-                                address.getStreet().equals(selectedStreet) && 
+                        .filter(address -> address.getCountry().equals(selectedCountry) &&
+                                address.getCity().equals(selectedCity) &&
+                                address.getStreet().equals(selectedStreet) &&
                                 address.getHouseNumber().equals(selectedHouseNumber))
                         .map(Address::getApartmentNumber)
                         .distinct()
@@ -222,7 +222,7 @@ public class TaxOfficeChangeAddressController {
      * Wywołuje metodę uzupełniającą listę ulic po wybraniu odpowiedniego państwa.
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
      */
-    private void setupCountryComboBoxListener() {
+    private void setupAddressCountryComboBoxListener() {
         addressCountryComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
                 addressCityComboBox.setItems(null);
@@ -231,7 +231,7 @@ public class TaxOfficeChangeAddressController {
                 addressApartmentNumberComboBox.setItems(null);
             }
             if (newVal != null) {
-                populateCityComboBox(newVal);
+                populateAddressCityComboBox(newVal);
             }
         });
     }
@@ -241,7 +241,7 @@ public class TaxOfficeChangeAddressController {
      * Wywołuje metodę uzupełniającą listę ulic po wybraniu odpowiedniego miasta.
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
      */
-    private void setupCityComboBoxListener() {
+    private void setupAddressCityComboBoxListener() {
         addressCityComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
                 addressStreetComboBox.setItems(null);
@@ -250,7 +250,7 @@ public class TaxOfficeChangeAddressController {
             }
             String selectedCountry = addressCountryComboBox.getSelectionModel().getSelectedItem();
             if (newVal != null && selectedCountry != null) {
-                populateStreetComboBox(selectedCountry, newVal);
+                populateAddressStreetComboBox(selectedCountry, newVal);
             }
         });
     }
@@ -260,7 +260,7 @@ public class TaxOfficeChangeAddressController {
      * Wywołuje metodę uzupełniającą listę ulic po wybraniu odpowiedniej ulicy.
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
      */
-    private void setupStreetComboBoxListener() {
+    private void setupAddressStreetComboBoxListener() {
         addressStreetComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
                 addressHouseNumberComboBox.setItems(null);
@@ -274,7 +274,7 @@ public class TaxOfficeChangeAddressController {
         });
     }
 
-    
+
     /**
      * Wywołuje metodę uzupełniającą listę ulic po wybraniu odpowiedniego numeru domu.
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
@@ -296,7 +296,7 @@ public class TaxOfficeChangeAddressController {
 
     /**
      * Tworzy powiązanie między wybranym urzędem podatkowym a adresem po kliknięciu przycisku "Potwierdź".
-     * Weryfikuje utworzenie powiązania, korzystając ze zbioru obiektów powiązanych i wyświetla komunikat, 
+     * Weryfikuje utworzenie powiązania, korzystając ze zbioru obiektów powiązanych i wyświetla komunikat,
      * informujący o tym, czy powiązanie zostało utworzone prawidłowo.
      */
     private void setupAddressSendButtonListener() {
@@ -355,6 +355,7 @@ public class TaxOfficeChangeAddressController {
 
     /**
      * Wywołuje metodę służącą do deserializacji klas z repozytorium.
+     * Wywołuje metody, które uzupełniają tabelę państw i urzędów na podstawie wczytanych danych.
      * Wyświetla stosowny komunikat.
      */
     private void setupLoadMenuItemListener() {
@@ -363,6 +364,7 @@ public class TaxOfficeChangeAddressController {
             showAlert(Alert.AlertType.INFORMATION, "Zaktualizowano dane", null,
                     "Pobrano dane z repozytorium.");
             populateTaxOfficesTable();
+            populateAddressCountryComboBox();
         });
     }
 
@@ -408,9 +410,10 @@ public class TaxOfficeChangeAddressController {
 
     /**
      * Metoda pomocnicza – umożliwia wywoływanie komunikatów.
-     * @param alertType Rodzaj komunikatu.
-     * @param title Tytuł komunikatu.
-     * @param headerText Tekst nagłówka komunikatu.
+     *
+     * @param alertType   Rodzaj komunikatu.
+     * @param title       Tytuł komunikatu.
+     * @param headerText  Tekst nagłówka komunikatu.
      * @param contentText Tekst komunikatu.
      */
     public void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {

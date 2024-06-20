@@ -6,12 +6,13 @@ import java.util.HashSet;
 
 public class AccountManager implements Serializable {
 
+    
     // Ekstensja
     private static HashSet<AccountManager> accountManagers = new HashSet<>();
-    
+
     // Asocjacje kwalifikowana
     private final HashMap<String, PeriodEntrySet> periodEntrySets = new HashMap<>();
-    
+
     // Atrybuty wymagane
     private final String name;
     private final Status status;
@@ -23,19 +24,30 @@ public class AccountManager implements Serializable {
 
         accountManagers.add(this); // Dodaje do ekstensji
     }
-
+    
+    
+    /**
+     * Zwraca kopię ekstensji klasy.
+     * @return Kopia ekstensji klasy.
+     */
     public static HashSet<AccountManager> getAccountManagers() {
         return new HashSet<>(accountManagers);
     }
 
+
+    /**
+     * Ustawia kopię ekstensji klasy – wymagane przez mechanizm serializacji.
+     * @param accountManagers Ekstensja klasy.
+     */
     public static void setAccountManagers(HashSet<AccountManager> accountManagers) {
         AccountManager.accountManagers = accountManagers;
     }
 
-    
+
     /**
      * Dodaje nowe powiązanie z obiektem zbioru wpisów księgowych.
      * Korzysta z abbreviation jako klucza.
+     *
      * @param periodEntrySet Zbiór wpisów księgowych, niebędący null.
      */
     public void addPeriodEntrySet(PeriodEntrySet periodEntrySet) {
@@ -52,6 +64,7 @@ public class AccountManager implements Serializable {
 
     /**
      * Usuwa powiązanie z obiektem zbioru wpisów księgowych.
+     *
      * @param periodEntrySet Zbiór wpisów księgowych, dla którego istnieje już powiązanie.
      */
     public void removePeriodEntrySet(PeriodEntrySet periodEntrySet) {
@@ -64,6 +77,7 @@ public class AccountManager implements Serializable {
 
     /**
      * Zwraca powiązany zbiór wpisów księgowych na podstawie jego abbreviation (kwalifikatora).
+     *
      * @param abbreviation Atrybut pochodny abbreviation w klasie zbioru wpisów księgowych, wywoływany przez
      *                     getAbbreviation()
      * @return Powiązany zbiór wpisów księgowych na podstawie określonego kwalifikatora.

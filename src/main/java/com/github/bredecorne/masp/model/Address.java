@@ -10,12 +10,9 @@ public class Address implements Serializable {
 
     // Ekstensja
     private static HashSet<Address> addresses = new HashSet<>();
-    
+
     // Asocjacje wiele-do-wiele
     private final HashSet<Person> persons = new HashSet<>();
-    
-    // Asocjacje jeden-do-wiele (po stronie jeden)
-    private TaxOffice taxOffice;
     
     // Atrybuty wymagane
     private final Country country;
@@ -23,10 +20,14 @@ public class Address implements Serializable {
     private final String street;
     private final String houseNumber;
     
+    // Asocjacje jeden-do-wiele (po stronie jeden)
+    private TaxOffice taxOffice;
+    
     // Atrybuty opcjonalne
     private String apartmentNumber;
 
-    public Address(Country country, String city, String street, String houseNumber, String apartmentNumber, 
+    
+    public Address(Country country, String city, String street, String houseNumber, String apartmentNumber,
                    TaxOffice taxOffice) {
         if (country == null || city == null || street == null ||
                 isHouseNumberInvalid(houseNumber)) {
@@ -42,6 +43,7 @@ public class Address implements Serializable {
         addresses.add(this); // Dodaje do ekstensji
     }
 
+    
     public Address(Country country, String city, String street, String houseNumber, String apartmentNumber) {
         if (country == null || city == null || street == null ||
                 isHouseNumberInvalid(houseNumber)) {
@@ -56,6 +58,7 @@ public class Address implements Serializable {
         addresses.add(this); // Dodaje do ekstensji
     }
 
+    
     public Address(Country country, String city, String street, String houseNumber) {
         if (country == null || city == null || street == null ||
                 isHouseNumberInvalid(houseNumber)) {
@@ -69,6 +72,7 @@ public class Address implements Serializable {
         addresses.add(this); // Dodaje do ekstensji
     }
 
+    
     /**
      * Metoda pomocnicza – weryfikuje poprawność zadanego numeru domu lub mieszkania.
      * <p>
@@ -83,18 +87,39 @@ public class Address implements Serializable {
         return !pattern.matcher(number).matches();
     }
 
+
+    /**
+     * Zwraca kopię ekstensji klasy.
+     * @return Kopia ekstensji klasy.
+     */
     public static HashSet<Address> getAddresses() {
         return new HashSet<>(addresses);
     }
 
+
+    /**
+     * Ustawia ekstensję klasy – wymagane na potrzeby serializacji.
+     * @param addresses Ekstensja klasy.
+     */
     public static void setAddresses(HashSet<Address> addresses) {
         Address.addresses = addresses;
     }
 
+
+    /**
+     * Zwraca wartość powiązania z urzędem podatkowym.
+     * @return Urząd podatkowy, z którym istnieje powiązanie lub wartość null.
+     */
     public TaxOffice getTaxOffice() {
         return taxOffice;
     }
 
+
+    /**
+     * Ustawia powiązanie z urzędem podatkowym lub usuwa powiązanie, nadając wartość null.
+     * Wywołuje analogiczną metodę po stronie urzędu podatkowego (po stronie wiele).
+     * @param taxOffice Urząd podatkowy lub wartość null.
+     */
     public void setTaxOffice(TaxOffice taxOffice) {
         this.taxOffice = taxOffice;
         if (taxOffice != null) {
@@ -155,6 +180,11 @@ public class Address implements Serializable {
         return apartmentNumber;
     }
 
+
+    /**
+     * Zwraca kopię zbioru powiązań obiektów osób/klientów.
+     * @return Kopia zbioru powiązań obiektów osób/klientów.
+     */
     public HashSet<Person> getPersons() {
         return new HashSet<>(persons);
     }

@@ -6,8 +6,10 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -30,85 +32,96 @@
             </menus>
         </MenuBar>
     </top>
-
-    <left>
-        <VBox prefWidth="500.0" style="-fx-background-color: #F8F9F9;" BorderPane.alignment="CENTER">
-            <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2, b" text="Urzędy podatkowe">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="80.0" />
-               </VBox.margin></Text>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="p" text="Wyświetlaj urzędy podatkowe oraz modyfikuj ich zakres właściwości terytorialnej." wrappingWidth="400.0" />
-                <TableView fx:id="taxOfficeTable" styleClass="no-header" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="taxOfficeTableColumn" prefWidth="269.0" resizable="false" text="" />
-                    </columns>
-               <VBox.margin>
-                  <Insets bottom="80.0" top="60.0" />
-               </VBox.margin>
-                </TableView>
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
-    </left>
-   <center>
-        <VBox prefWidth="347.0" spacing="10.0" BorderPane.alignment="CENTER">
-            <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Dodaj adres, dla którego urząd jest właściwy">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="80.0" />
-               </VBox.margin></Text>
-                <GridPane hgap="10.0" vgap="10.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" />
-                  <ColumnConstraints />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                    </rowConstraints>
+    <center>
+        <SplitPane dividerPositions="0.3" BorderPane.alignment="CENTER">
+            <items>
+                <AnchorPane>
                     <children>
-                        <HBox spacing="10.0" GridPane.rowIndex="0">
+                        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <ComboBox fx:id="addressCountryComboBox" maxWidth="Infinity" styleClass="split-menu-btn" />
-                                <ComboBox fx:id="addressCityComboBox" maxWidth="430.0" styleClass="split-menu-btn" HBox.hgrow="ALWAYS" />
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2, b" text="Urzędy podatkowe">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="p" text="Wyświetlaj urzędy podatkowe oraz modyfikuj ich zakres właściwości terytorialnej." wrappingWidth="400.0" />
+                                <TableView fx:id="taxOfficeTable" styleClass="no-header" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="taxOfficeTableColumn" text="" />
+                                    </columns>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" top="30.0" />
+                                    </VBox.margin>
+                                </TableView>
                             </children>
-                        </HBox>
-                        <HBox spacing="10.0" GridPane.rowIndex="1">
-                            <children>
-                                <ComboBox fx:id="addressStreetComboBox" maxWidth="Infinity" prefWidth="300.0" styleClass="split-menu-btn" />
-                                <ComboBox fx:id="addressHouseNumberComboBox" maxWidth="Infinity" prefWidth="100.0" styleClass="split-menu-btn" />
-                                <ComboBox fx:id="addressApartmentNumberComboBox" maxWidth="Infinity" prefWidth="100.0" styleClass="split-menu-btn" />
-                            </children>
-                        </HBox>
-                        <Button fx:id="addressSendButton" mnemonicParsing="false" styleClass="btn" text="Zatwierdź" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                            <padding>
+                                <Insets bottom="80.0" left="40.0" right="40.0" top="120.0" />
+                            </padding>
+                        </VBox>
                     </children>
-                </GridPane>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Usuń właściwość terytorialną urzędu">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="40.0" />
-               </VBox.margin>
-            </Text>
-            <TableView fx:id="addressesTable" maxWidth="520.0" styleClass="no-header">
-               <columns>
-                  <TableColumn fx:id="addressesTableColumn" prefWidth="269.0" resizable="false" text="" />
-               </columns>
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin>
-            </TableView>
-            <Button fx:id="addressRemoveButton" mnemonicParsing="false" styleClass="btn" text="Usuń">
-               <VBox.margin>
-                  <Insets bottom="40.0" />
-               </VBox.margin>
-            </Button>
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
-   </center>
+                </AnchorPane>
+                <AnchorPane>
+                    <children>
+                        <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Dodaj adres, dla którego urząd jest właściwy">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" top="10.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <GridPane hgap="10.0" vgap="10.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="ALWAYS" />
+                                        <ColumnConstraints />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <HBox spacing="10.0" GridPane.rowIndex="0">
+                                            <children>
+                                                <ComboBox fx:id="addressCountryComboBox" maxWidth="Infinity" styleClass="split-menu-btn" />
+                                                <ComboBox fx:id="addressCityComboBox" maxWidth="Infinity" styleClass="split-menu-btn" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox spacing="10.0" GridPane.rowIndex="1">
+                                            <children>
+                                                <ComboBox fx:id="addressStreetComboBox" maxWidth="Infinity" styleClass="split-menu-btn" />
+                                                <ComboBox fx:id="addressHouseNumberComboBox" maxWidth="Infinity" styleClass="split-menu-btn" />
+                                                <ComboBox fx:id="addressApartmentNumberComboBox" maxWidth="Infinity" styleClass="split-menu-btn" />
+                                            </children>
+                                        </HBox>
+                                        <Button fx:id="addressSendButton" mnemonicParsing="false" styleClass="btn" text="Zatwierdź" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                    </children>
+                                </GridPane>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Usuń właściwość terytorialną urzędu">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" top="40.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <TableView fx:id="addressesTable" styleClass="no-header" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="addressesTableColumn" prefWidth="269.0" resizable="false" text="" />
+                                    </columns>
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" />
+                                    </VBox.margin>
+                                </TableView>
+                                <Button fx:id="addressRemoveButton" mnemonicParsing="false" styleClass="btn" text="Usuń">
+                                    <VBox.margin>
+                                        <Insets bottom="40.0" />
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </center>
 </BorderPane>

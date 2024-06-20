@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.util.NavigableMap;
 
 public class ProgressiveTax extends Tax {
+    
+    // Atrybuty wymagane
     private final NavigableMap<BigDecimal, BigDecimal> value;
 
+    
     public ProgressiveTax(NavigableMap<BigDecimal, BigDecimal> value) {
         super();
         if (value == null) {

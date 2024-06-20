@@ -3,6 +3,8 @@ package com.github.bredecorne.masp.model.taxes;
 import java.math.BigDecimal;
 
 public class UniformTax extends Tax {
+    
+    // Atrybuty wymagane
     private final BigDecimal value;
 
     public UniformTax(BigDecimal value) {

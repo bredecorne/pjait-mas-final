@@ -15,10 +15,10 @@ public class TaxOffice implements Serializable {
 
     // Ekstensja
     private static HashSet<TaxOffice> taxOffices = new HashSet<>();
-    
+
     // Atrybuty wymagane
     private final String name;
-    
+
     // Asocjacje jeden-do-wiele (po stronie wiele)
     private final HashSet<Address> addresses = new HashSet<>();
 
@@ -36,11 +36,21 @@ public class TaxOffice implements Serializable {
 
         taxOffices.add(this); // Dodaje do ekstensji
     }
-    
+
+
+    /**
+     * Zwraca kopię ekstensji klasy.
+     * @return Kopia ekstensji klasy.
+     */
     public static HashSet<TaxOffice> getTaxOffices() {
         return new HashSet<TaxOffice>(taxOffices);
     }
 
+
+    /**
+     * Ustawia ekstensję klasy – wymagane przez mechanizm serializacji.
+     * @param taxOffices Ekstensja klasy.
+     */
     public static void setTaxOffices(HashSet<TaxOffice> taxOffices) {
         TaxOffice.taxOffices = taxOffices;
     }
@@ -49,6 +59,11 @@ public class TaxOffice implements Serializable {
         return name;
     }
 
+
+    /**
+     * Zwraca kopię powiązanych z obiektem adresów.
+     * @return Kopia powiązanych z adresem obiektów.
+     */
     public HashSet<Address> getAddresses() {
         return new HashSet<>(addresses);
     }
@@ -56,10 +71,13 @@ public class TaxOffice implements Serializable {
     /**
      * Tworzy nowe powiązanie z adresem.
      * Wywołuje analogiczną metodę po stronie adresu.
+     *
      * @param address Adres, niebędący wartością null.
      */
     public void addAddress(Address address) {
-        if (address == null) { throw new IllegalArgumentException(); }
+        if (address == null) {
+            throw new IllegalArgumentException();
+        }
         if (!addresses.contains(address)) {
             addresses.add(address);
             address.setTaxOffice(this);
@@ -68,10 +86,13 @@ public class TaxOffice implements Serializable {
 
     /**
      * Usuwa powiązanie z adresem.
+     *
      * @param address Adres, z którym istnieje już powiązanie.
      */
     public void removeAddress(Address address) {
-        if (address == null) { throw new IllegalArgumentException(); }
+        if (address == null) {
+            throw new IllegalArgumentException();
+        }
         if (addresses.contains(address)) {
             addresses.remove(address);
             address.setTaxOffice(null);

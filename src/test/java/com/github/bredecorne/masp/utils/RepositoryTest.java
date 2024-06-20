@@ -15,6 +15,9 @@ class RepositoryTest {
 
     @Test
     void serializesAndDeserializesSuccessfully() {
+        
+        // Tworzy obiekty wszystkich klas
+        
         var accountManager = new AccountManager("John Doe", Status.ACTIVE);
         var address = new Address(Country.PL, "Poznań", "Warszawska", "12", "3A");
         var person = new LegalPerson("Company XYZ", Status.ACTIVE, BigDecimal.TEN, false, 
@@ -25,6 +28,8 @@ class RepositoryTest {
         var taxOffice = new TaxOffice("Urząd m.st. Częstochowy");
         
         Repository.serialize();
+        
+        // Usuwa ekstensje
         
         AccountManager.setAccountManagers(new HashSet<>());
         Address.setAddresses(new HashSet<>());

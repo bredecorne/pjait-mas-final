@@ -9,8 +9,22 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccountManagerTest {
+
     @Test
-    void findsAnAssociatedPeriodEntrySetUsingAbbreviation() {
+    void createsAnAccountManagerObjectSuccessfully() {
+        var name = "Katarzyna Kierownik";
+        var status = Status.INACTIVE;
+        
+        var accountManager = new AccountManager(name, status);
+        
+        assertAll(
+                () -> assertEquals(name, accountManager.getName()),
+                () -> assertEquals(status, accountManager.getStatus())
+        );
+    }
+
+    @Test
+    void findsAnAssociatedPeriodEntrySetUsingAbbreviationSuccessfully() {
         var periodEntrySet1 = new PeriodEntrySet(
                 LocalDate.now().minusDays(14), LocalDate.now(), new LegalPerson(
                         "Agata Nowak", Status.ACTIVE, BigDecimal.ZERO, 

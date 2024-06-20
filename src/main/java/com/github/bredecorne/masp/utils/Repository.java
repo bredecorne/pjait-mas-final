@@ -59,7 +59,7 @@ public class Repository {
         }
     }
 
-    
+
     private record DataTransferObject(HashSet<Person> persons, HashSet<Tax> taxes,
                                       HashSet<AccountManager> accountManagers,
                                       HashSet<Address> addresses, HashSet<PeriodEntrySet> periodEntrySets,

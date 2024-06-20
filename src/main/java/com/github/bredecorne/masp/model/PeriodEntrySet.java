@@ -3,7 +3,6 @@ package com.github.bredecorne.masp.model;
 import com.github.bredecorne.masp.model.persons.Person;
 import com.github.bredecorne.masp.model.taxes.Tax;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -30,7 +29,7 @@ public class PeriodEntrySet implements Serializable {
 
     // Asocjacje wiele-do-wiele
     private final HashSet<Tax> taxes = new HashSet<>();
-    
+
     // Asocjacja kwalifikowana
     private AccountManager accountManager;
 
@@ -53,7 +52,7 @@ public class PeriodEntrySet implements Serializable {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.person = person;
-        
+
         person.addPeriodEntrySet(this); // Dodaje powiązanie z obiektem osoby
         periodEntrySets.add(this); // Dodaje do ekstensji
     }
@@ -79,10 +78,13 @@ public class PeriodEntrySet implements Serializable {
      * Ustawia osobę/klienta, który jest właścicielem danego zbioru wartości księgowych.
      * Zwraca wyjątek w sytuacji, gdy klient jest null.
      * Wywołuje analogiczną metodę w obiekcie osoby (po stronie wiele).
+     *
      * @param person Osoba, niebędąca null.
      */
     public void setPerson(Person person) {
-        if (person == null) { throw new IllegalArgumentException(); }
+        if (person == null) {
+            throw new IllegalArgumentException();
+        }
         if (person != this.person) {
             this.person.replacePeriodEntrySet(this, person);
             this.person = person;
@@ -225,6 +227,7 @@ public class PeriodEntrySet implements Serializable {
 
     /**
      * Zwraca powiązany obiekt menedżera konta.
+     *
      * @return Menedżer konta, z którym istnieje powiązanie.
      */
     public AccountManager getAccountManager() {
@@ -233,11 +236,15 @@ public class PeriodEntrySet implements Serializable {
 
 
     /**
-     * Ustawia powiązanie z obiektem menedżera konta.
-     * @param accountManager Menedżer konta, niebędący wartością null.
+     * Ustawia powiązanie z obiektem menedżera konta lub usuwa go, przyjmując wartość null.
+     *
+     * @param accountManager Menedżer konta.
      */
     public void setAccountManager(AccountManager accountManager) {
-        if (accountManager == null) { throw new IllegalArgumentException(); }
+        if (accountManager == null) {
+            this.accountManager.removePeriodEntrySet(this);
+            this.accountManager = null;
+        }
         if (accountManager != this.accountManager) {
             this.accountManager = accountManager;
             accountManager.addPeriodEntrySet(this);
