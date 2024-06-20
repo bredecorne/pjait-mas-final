@@ -4,6 +4,10 @@ import com.github.bredecorne.masp.model.Status;
 
 import java.math.BigDecimal;
 
+
+/**
+ * Klasa reprezentującą osobę fizyczną.
+ */
 public class NaturalPerson extends Person {
 
     // Atrybuty wymagane

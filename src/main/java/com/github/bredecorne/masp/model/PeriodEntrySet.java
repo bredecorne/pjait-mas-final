@@ -40,7 +40,7 @@ public class PeriodEntrySet implements Serializable {
      *
      * @param dateFrom Data początkowa okresu, którego wpisy będą zawierały się w danym zbiorze.
      * @param dateTo   Data końcowa okresu, którego wpisy będą zawierały się w danym zbiorze.
-     * @param person   Osoba – klient, który jest właścicielem transakcji.
+     * @param person   Osoba – klient, który jest właścicielem zbioru wpisów księgowych.
      */
     public PeriodEntrySet(LocalDate dateFrom, LocalDate dateTo, Person person) {
         if (dateFrom == null || dateTo == null ||
@@ -50,7 +50,8 @@ public class PeriodEntrySet implements Serializable {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.person = person;
-
+        
+        person.addPeriodEntrySet(this); // Dodaje powiązanie z obiektem osoby
         periodEntrySets.add(this); // Dodaje do ekstensji
     }
 
@@ -70,10 +71,19 @@ public class PeriodEntrySet implements Serializable {
         return person;
     }
 
+
+    /**
+     * Ustawia osobę/klienta, który jest właścicielem danego zbioru wartości księgowych.
+     * Zwraca wyjątek w sytuacji, gdy klient jest null.
+     * Wywołuje analogiczną metodę w obiekcie osoby (po stronie wiele).
+     * @param person Osoba, niebędąca null.
+     */
     public void setPerson(Person person) {
         if (person == null) { throw new IllegalArgumentException(); }
-        this.person = person;
-        person.addPeriodEntrySet(this);
+        if (person != this.person) {
+            this.person.replacePeriodEntrySet(this, person);
+            this.person = person;
+        }
     }
 
     /**
@@ -82,10 +92,10 @@ public class PeriodEntrySet implements Serializable {
      * W określaniu wartości uwzględnia zakres dat oraz nazwę klienta.
      *
      * @return abbreviation Ciąg znaków złożony z kolejno: nazwy klienta, daty początkowej zbioru wpisów księgowych
-     * i daty końcowej zbioru wpisów księgowych (np. ABC-2024-01-01-TO-2024-02-27)
+     * i daty końcowej zbioru wpisów księgowych (np. ABC - RRRR-MM-DD TO: RRRR-MM-DD)
      */
     public String getAbbreviation() {
-        return String.join(person.getName(), "-", dateFrom.toString(), "-TO-", dateTo.toString());
+        return String.format("%s - %s TO: %s", person.getName(), dateFrom.toString(), dateTo.toString());
     }
 
     public LocalDate getDateFrom() {

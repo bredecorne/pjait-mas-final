@@ -4,6 +4,10 @@ import com.github.bredecorne.masp.model.Status;
 
 import java.math.BigDecimal;
 
+
+/**
+ * Klasa reprezentująca osobę jednostkę organizacyjną, nieposiadającą osobowości prawnej.
+ */
 public class ImperfectLegalPerson extends Person {
 
     /**

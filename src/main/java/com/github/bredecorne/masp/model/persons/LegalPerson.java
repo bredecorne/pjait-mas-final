@@ -4,6 +4,10 @@ import com.github.bredecorne.masp.model.Status;
 
 import java.math.BigDecimal;
 
+
+/**
+ * Klasa reprezentująca osobę prawną.
+ */
 public class LegalPerson extends Person {
 
     // Atrybuty wymagane

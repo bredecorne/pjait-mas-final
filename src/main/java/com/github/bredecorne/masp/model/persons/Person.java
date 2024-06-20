@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 
+
+/**
+ * Klasa abstrakcyjna reprezentująca osobę/klienta.
+ */
 public abstract class Person implements Serializable {
 
     // Atrybuty klasowe
@@ -62,6 +66,12 @@ public abstract class Person implements Serializable {
         return PREFERENTIAL_THRESHOLD;
     }
 
+
+    /**
+     * Ustawia wartość progu, po którego przekroczeniu klient może być traktowany preferencyjnie.
+     * Weryfikuje czy podawany próg jest wyższy od wartości 0; w przeciwnym razie zwraca wyjątek.
+     * @param preferentialThreshold Wartość progu, po którego przekroczeniu klient może być traktowany preferencyjnie.
+     */
     public static void setPreferentialThreshold(BigDecimal preferentialThreshold) {
         if (preferentialThreshold.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -69,10 +79,16 @@ public abstract class Person implements Serializable {
         PREFERENTIAL_THRESHOLD = preferentialThreshold;
     }
 
+    
+    /**
+     * Zwraca kopię ekstensji.
+     * @return Kopia ekstensji.
+     */
     public static HashSet<Person> getPersons() {
         return new HashSet<>(persons);
     }
 
+    
     public static void setPersons(HashSet<Person> persons) {
         Person.persons = persons;
     }
@@ -85,6 +101,12 @@ public abstract class Person implements Serializable {
         return status;
     }
 
+
+    /**
+     * Ustawia status osoby.
+     * Weryfikuje, czy podawany status nie jest wartością null; w przeciwnym razie zwraca wyjątek.
+     * @param status Obiekt klasy wyliczeniowej Status.
+     */
     public void setStatus(Status status) {
         if (status == null) {
             throw new IllegalArgumentException();
@@ -96,6 +118,12 @@ public abstract class Person implements Serializable {
         return feeRate;
     }
 
+    
+    /**
+     * Ustawia prowizję.
+     * Weryfikuje czy podawana prowizja jest wyższa od wartości 0; w przeciwnym razie zwraca wyjątek.
+     * @param feeRate Wartość prowizji.
+     */
     public void setFeeRate(BigDecimal feeRate) {
         if (feeRate.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -129,26 +157,55 @@ public abstract class Person implements Serializable {
         }
     }
 
+
+    /**
+     * Zwraca wartość zmiennej punktów lojalnościowych.
+     * Ma zastosowanie wyłącznie wobec klientów, którzy nie są klientami preferencyjnymi. W razie wywołania dla
+     * klientów preferencyjnych zwraca wyjątek.
+     * @return Liczba punktów lojalnościowych klienta
+     */
     public BigDecimal getLoyaltyPoints() {
         if (preferential) throw new RuntimeException();
         return loyaltyPoints;
     }
 
+
+    /**
+     * Ustawia wartość zmiennej punktów lojalnościowych.
+     * Ma zastosowanie wyłącznie wobec klientów, którzy nie są klientami preferencyjnymi. W razie wywołania dla
+     * klientów preferencyjnych zwraca wyjątek.
+     * @param loyaltyPoints Oczekiwana liczba punktów lojalnościowych klienta.
+     */
     public void setLoyaltyPoints(BigDecimal loyaltyPoints) {
         if (preferential) throw new RuntimeException();
         this.loyaltyPoints = loyaltyPoints;
     }
 
+
+    /**
+     * Zwraca wartość zniżki dla klientów preferencyjnych.
+     * Ma zastosowanie wyłącznie wobec klientów, którzy są klientami preferencyjnymi. W razie wywołania dla
+     * klientów niepreferencyjnych zwraca wyjątek.
+     * @return Wartość zniżki stosowanej dla klienta preferencyjnego.
+     */
     public BigDecimal getDiscountRate() {
         if (!preferential) throw new RuntimeException();
         return discountRate;
     }
 
+
+    /**
+     * Ustawia wartość zniżki dla klientów preferencyjnych.
+     * Ma zastosowanie wyłącznie wobec klientów, którzy są klientami preferencyjnymi. W razie wywołania dla
+     * klientów niepreferencyjnych zwraca wyjątek.
+     * @param discountRate Oczekiwana wartość zniżki stosowanej dla klienta preferencyjnego.
+     */
     public void setDiscountRate(BigDecimal discountRate) {
         if (!preferential) throw new RuntimeException();
         this.discountRate = discountRate;
     }
 
+    
     /**
      * Tworzy związek powiązania z obiektem reprezentującym adres.
      * <p>
@@ -167,6 +224,7 @@ public abstract class Person implements Serializable {
         }
     }
 
+    
     /**
      * Usuwa związek powiązania z obiektem reprezentującym adres.
      * <p>
@@ -182,10 +240,22 @@ public abstract class Person implements Serializable {
         }
     }
 
+    
+    /**
+     * Zwraca kopię powiązań (liczność wiele-do-wiele) z obiektami adresu (zamieszkania lub siedziby klienta).
+     * @return Kopia zbioru powiązań z obiektami reprezentującymi adres.
+     */
     public HashSet<Address> getAddresses() {
         return new HashSet<>(addresses);
     }
-    
+
+
+    /**
+     * Dodaje nowe powiązanie ze zbiorem wartości księgowych.
+     * Zwraca wyjątek w sytuacji, w której zbiór wartości księgowych jest null.
+     * Wywołuje analogiczną metodę w obiekcie zbioru wartości księgowych (po stronie jeden).
+     * @param periodEntrySet Zbiór wartości księgowych, niebędący null.
+     */
     public void addPeriodEntrySet(PeriodEntrySet periodEntrySet) {
         if (periodEntrySet == null) { throw new IllegalArgumentException(); }
         if (!periodEntrySets.contains(periodEntrySet)) {
@@ -193,12 +263,30 @@ public abstract class Person implements Serializable {
             periodEntrySet.setPerson(this);
         }
     }
-    
-    public void replacePeriodEntrySet(PeriodEntrySet periodEntrySet, Person person) {
-        if (person == null) { throw new IllegalArgumentException(); }
+
+
+    /**
+     * Usuwa zbiór wartości księgowych z właściwości danego klienta. Przypisuje zbiorowi nową właściwość klienta.
+     * Zwraca wyjątek w sytuacji, w której zbiór wartości księgowych lub klient jest null.
+     * Wywołuje analogiczną metodę w obiekcie zbioru wartości księgowych (po stronie jeden).
+     * @param periodEntrySet Zbiór wartości księgowych, niebędący null.
+     * @param newPerson Klient, któremu nadana zostanie właściwość dla danego zbioru księgowego.
+     */
+    public void replacePeriodEntrySet(PeriodEntrySet periodEntrySet, Person newPerson) {
+        if (periodEntrySet == null || newPerson == null) { throw new IllegalArgumentException(); }
         if (periodEntrySets.contains(periodEntrySet)) {
             periodEntrySets.remove(periodEntrySet);
-            periodEntrySet.setPerson(person);
+            periodEntrySet.setPerson(newPerson);
+            newPerson.addPeriodEntrySet(periodEntrySet);
         }
+    }
+
+
+    /**
+     * Zwraca kopię powiązań ze zbiorami wpisów księgowych.
+     * @return Kopia powiązań ze zbiorami wpisów księgowych.
+     */
+    public HashSet<PeriodEntrySet> getPeriodEntrySets() {
+        return new HashSet<>(periodEntrySets);
     }
 }
