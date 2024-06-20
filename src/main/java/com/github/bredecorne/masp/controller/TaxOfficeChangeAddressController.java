@@ -223,7 +223,7 @@ public class TaxOfficeChangeAddressController {
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
      */
     private void setupAddressCountryComboBoxListener() {
-        addressCountryComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+        addressCountryComboBox.getSelectionModel().selectedItemProperty().addListener((_, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
                 addressCityComboBox.setItems(null);
                 addressStreetComboBox.setItems(null);
@@ -242,7 +242,7 @@ public class TaxOfficeChangeAddressController {
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
      */
     private void setupAddressCityComboBoxListener() {
-        addressCityComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+        addressCityComboBox.getSelectionModel().selectedItemProperty().addListener((_, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
                 addressStreetComboBox.setItems(null);
                 addressHouseNumberComboBox.setItems(null);
@@ -261,7 +261,7 @@ public class TaxOfficeChangeAddressController {
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
      */
     private void setupAddressStreetComboBoxListener() {
-        addressStreetComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+        addressStreetComboBox.getSelectionModel().selectedItemProperty().addListener((_, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
                 addressHouseNumberComboBox.setItems(null);
                 addressApartmentNumberComboBox.setItems(null);
@@ -280,7 +280,7 @@ public class TaxOfficeChangeAddressController {
      * W sytuacji zmiany wartości na inną usuwa wybory w pozostałych polach.
      */
     private void setupAddressHouseNumberComboBoxListener() {
-        addressHouseNumberComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+        addressHouseNumberComboBox.getSelectionModel().selectedItemProperty().addListener((_, oldVal, newVal) -> {
             if (!Objects.equals(newVal, oldVal)) {
                 addressApartmentNumberComboBox.setItems(null);
             }
@@ -300,7 +300,7 @@ public class TaxOfficeChangeAddressController {
      * informujący o tym, czy powiązanie zostało utworzone prawidłowo.
      */
     private void setupAddressSendButtonListener() {
-        addressSendButton.setOnAction(event -> {
+        addressSendButton.setOnAction(_ -> {
             String selectedCountry = addressCountryComboBox.getSelectionModel().getSelectedItem();
             String selectedCity = addressCityComboBox.getSelectionModel().getSelectedItem();
             String selectedStreet = addressStreetComboBox.getSelectionModel().getSelectedItem();
@@ -345,7 +345,7 @@ public class TaxOfficeChangeAddressController {
      * Wyświetla stosowny komunikat.
      */
     private void setupSaveMenuItemListener() {
-        saveMenu.setOnAction(event -> {
+        saveMenu.setOnAction(_ -> {
             Repository.serialize();
             showAlert(Alert.AlertType.INFORMATION, "Zapisano dane", null,
                     "Zapisano dane do repozytorium.");
@@ -359,7 +359,7 @@ public class TaxOfficeChangeAddressController {
      * Wyświetla stosowny komunikat.
      */
     private void setupLoadMenuItemListener() {
-        loadMenu.setOnAction(event -> {
+        loadMenu.setOnAction(_ -> {
             Repository.deserialize();
             showAlert(Alert.AlertType.INFORMATION, "Zaktualizowano dane", null,
                     "Pobrano dane z repozytorium.");
@@ -373,7 +373,7 @@ public class TaxOfficeChangeAddressController {
      * wybierze adres lub zmieni swój wybór.
      */
     private void setupTaxOfficeTableListener() {
-        taxOfficeTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+        taxOfficeTable.getSelectionModel().selectedItemProperty().addListener((_, _, newVal) -> {
             if (newVal != null) {
                 populateAddressesTable(newVal);
             }
@@ -388,7 +388,7 @@ public class TaxOfficeChangeAddressController {
      * Wywołuje metodę uzupełniającą tabelę adresów powiązanych z urzędem.
      */
     private void setupAddressRemoveButtonListener() {
-        addressRemoveButton.setOnAction(event -> {
+        addressRemoveButton.setOnAction(_ -> {
             if (taxOfficeTable.getSelectionModel().getSelectedItem() != null) {
                 var selectedTaxOffice = taxOfficeTable.getSelectionModel().getSelectedItem();
                 if (addressesTable.getSelectionModel().getSelectedItem() != null) {

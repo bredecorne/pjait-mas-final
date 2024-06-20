@@ -40,6 +40,7 @@ public class Address implements Serializable {
         this.apartmentNumber = apartmentNumber;
         this.taxOffice = taxOffice;
 
+        taxOffice.addAddress(this); // Tworzy powiązanie
         addresses.add(this); // Dodaje do ekstensji
     }
 

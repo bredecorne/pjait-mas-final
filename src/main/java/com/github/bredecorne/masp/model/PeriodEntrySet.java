@@ -65,10 +65,6 @@ public class PeriodEntrySet implements Serializable {
         PeriodEntrySet.periodEntrySets = periodEntrySets;
     }
 
-    public HashSet<Entry> getEntries() {
-        return new HashSet<>(entries);
-    }
-
     public Person getPerson() {
         return person;
     }
@@ -126,16 +122,13 @@ public class PeriodEntrySet implements Serializable {
      */
     private BigDecimal sum(boolean positive) {
         var sum = new BigDecimal(BigInteger.ZERO);
-
-        for (Entry entry : entries) {
-            if (positive && entry.getValue().compareTo(BigDecimal.ZERO) > 0) {
-                sum = sum.add(entry.getValue());
-            } else {
-                sum = sum.add(entry.getValue());
-            }
+        var valuesStream = entries.stream().map(Entry::getValue);
+        
+        if (positive) {
+            return valuesStream.filter(v -> v.compareTo(BigDecimal.ZERO) > 0).reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
+            return valuesStream.filter(v -> v.compareTo(BigDecimal.ZERO) < 0).reduce(BigDecimal.ZERO, BigDecimal::add);
         }
-
-        return sum;
     }
 
     /**
@@ -162,7 +155,7 @@ public class PeriodEntrySet implements Serializable {
      * @return Dochód uzyskany w danym okresie księgowym.
      */
     public BigDecimal getIncome() {
-        return getRevenue().subtract(getExpenses());
+        return getRevenue().add(getExpenses());
     }
 
     /**

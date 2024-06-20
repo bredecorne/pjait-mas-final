@@ -2,6 +2,7 @@ package com.github.bredecorne.masp.model;
 
 import com.github.bredecorne.masp.model.persons.LegalPerson;
 import com.github.bredecorne.masp.model.persons.NaturalPerson;
+import com.github.bredecorne.masp.model.taxes.UniformTax;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -32,4 +33,34 @@ class PeriodEntrySetTest {
         );
     }
 
+    @Test
+    void calculatesNumericalValuesCorrectly() {
+        var person = new LegalPerson("Agata S.A.", Status.ACTIVE, BigDecimal.ZERO, false,
+                BigDecimal.ZERO, false);
+        var periodEntrySet = new PeriodEntrySet(LocalDate.now(), LocalDate.now(), person);
+        var taxValue = new UniformTax(new BigDecimal("0.1"));
+        periodEntrySet.addEntry(LocalDate.now(), new BigDecimal("1000"));
+        periodEntrySet.addEntry(LocalDate.now(), new BigDecimal("1000"));
+        periodEntrySet.addEntry(LocalDate.now(), new BigDecimal("-500"));
+        periodEntrySet.addEntry(LocalDate.now(), new BigDecimal("-500"));
+        var expectedRevenue = new BigDecimal("2000");
+        var expectedExpenses = new BigDecimal("-1000");
+        var expectedIncome = new BigDecimal("1000");
+        var expectedTax = new BigDecimal("100");
+        var expectedAfterTaxIncome = new BigDecimal("900"); 
+        
+        var revenue = periodEntrySet.getRevenue();
+        var expenses = periodEntrySet.getExpenses();
+        var income = periodEntrySet.getIncome();
+        var tax = periodEntrySet.getTax(taxValue);
+        var afterTaxIncome = periodEntrySet.getAfterTaxIncome(taxValue);
+        
+        assertAll(
+                () -> assertEquals(0, expectedRevenue.compareTo(revenue)),
+                () -> assertEquals(0, expectedExpenses.compareTo(expenses)),
+                () -> assertEquals(0, expectedIncome.compareTo(income)),
+                () -> assertEquals(0, expectedTax.compareTo(tax)),
+                () -> assertEquals(0, expectedAfterTaxIncome.compareTo(afterTaxIncome))
+        );
+    }
 }

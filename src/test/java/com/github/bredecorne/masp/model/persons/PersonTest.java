@@ -1,5 +1,7 @@
 package com.github.bredecorne.masp.model.persons;
 
+import com.github.bredecorne.masp.model.Address;
+import com.github.bredecorne.masp.model.Country;
 import com.github.bredecorne.masp.model.PeriodEntrySet;
 import com.github.bredecorne.masp.model.Status;
 import org.junit.jupiter.api.Test;
@@ -103,6 +105,20 @@ class PersonTest {
         assertAll(
                 () -> assertTrue(person1.getPeriodEntrySets().contains(periodEntrySet2)),
                 () -> assertFalse(person2.getPeriodEntrySets().contains(periodEntrySet2))
+        );
+    }
+
+    @Test
+    void createsAPersonThatIsAssociatedWithAddressSuccessfully() {
+        var person = new LegalPerson("Agata S.A.", Status.ACTIVE, BigDecimal.ZERO, false,
+                BigDecimal.ZERO, false);
+        var address = new Address(Country.PL, "Pruszków", "Święta", "14A");
+        
+        person.addAddress(address);
+        
+        assertEquals(
+                address,
+                person.getAddresses().stream().toList().getFirst()
         );
     }
 }

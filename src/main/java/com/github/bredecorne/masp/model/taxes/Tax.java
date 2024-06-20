@@ -24,7 +24,7 @@ public abstract class Tax implements Serializable {
      * @return Kopia ekstensji klasy.
      */
     public static HashSet<Tax> getTaxes() {
-        return new HashSet<Tax>(taxes);
+        return new HashSet<>(taxes);
     }
 
     /**
